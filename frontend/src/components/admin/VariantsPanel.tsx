@@ -268,12 +268,12 @@ function ItemVarsSection() {
             {v.color && <span className="text-sm font-semibold text-charcoal">{v.color}</span>}
             {v.ssize && (
               <span className="text-xs px-2 py-0.5 bg-indigo-lanna/10 text-indigo-lanna font-semibold">
-                เสื้อ: {v.ssize}
+                เครื่องดนตรี: {v.ssize}
               </span>
             )}
             {v.tsize && (
               <span className="text-xs px-2 py-0.5 bg-gold/15 text-charcoal font-semibold">
-                ทั่วไป: {v.tsize}
+                เสื้อ: {v.tsize}
               </span>
             )}
           </div>
@@ -290,18 +290,18 @@ function ItemVarsSection() {
                 placeholder="เช่น ครามเข้ม"
               />
             </Field>
-            <Field label="ไซส์เสื้อ (ssize)" hint="S, M, L, XL">
+            <Field label="ไซส์เครื่องดนตรี (ssize)" hint="เช่น เล็ก, กลาง, ใหญ่">
               <input
                 className="w-full px-3 py-2.5 border border-black/15 bg-cream text-sm font-sans focus:outline-none focus:border-charcoal"
                 value={form.ssize} onChange={(e) => setForm({ ...form, ssize: e.target.value })}
-                placeholder="M"
+                placeholder="มาตรฐาน"
               />
             </Field>
-            <Field label="ไซส์ทั่วไป (tsize)" hint="สำหรับเครื่องดนตรีหรือสินค้าอื่น">
+            <Field label="ไซส์เสื้อ (tsize)" hint="S, M, L, XL">
               <input
                 className="w-full px-3 py-2.5 border border-black/15 bg-cream text-sm font-sans focus:outline-none focus:border-charcoal"
                 value={form.tsize} onChange={(e) => setForm({ ...form, tsize: e.target.value })}
-                placeholder="เช่น มาตรฐาน, ใหญ่พิเศษ"
+                placeholder="M"
               />
             </Field>
             <SubmitBtn loading={saving} />
