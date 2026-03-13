@@ -1,0 +1,54 @@
+@import url('https://fonts.googleapis.com/css2?family=Sarabun:ital,wght@0,200;0,300;0,400;0,600;0,700;1,300;1,400&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html { scroll-behavior: smooth; }
+  body { @apply font-sans bg-cream text-charcoal antialiased leading-relaxed; }
+  ::selection { @apply bg-indigo-lanna text-white; }
+  ::-webkit-scrollbar { width: 5px; }
+  ::-webkit-scrollbar-track { @apply bg-cream; }
+  ::-webkit-scrollbar-thumb { @apply bg-gold rounded-full; }
+}
+
+@layer components {
+  .lanna-divider {
+    @apply flex items-center gap-3 text-gold text-lg tracking-[0.3em];
+  }
+  .lanna-divider::before,
+  .lanna-divider::after {
+    content: '';
+    @apply flex-1 h-px bg-gradient-to-r from-transparent via-gold to-transparent;
+  }
+
+  .delay-100 { animation-delay: 100ms; }
+  .delay-200 { animation-delay: 200ms; }
+  .delay-300 { animation-delay: 300ms; }
+  .delay-400 { animation-delay: 400ms; }
+  .delay-500 { animation-delay: 500ms; }
+  .delay-600 { animation-delay: 600ms; }
+
+  .btn-line {
+    @apply inline-flex items-center justify-center gap-2 bg-[#06C755] text-white
+           font-semibold px-10 py-4 tracking-wide transition-all duration-200
+           hover:-translate-y-1 hover:shadow-[0_12px_32px_rgba(6,199,85,0.35)] cursor-pointer;
+  }
+
+  .btn-primary {
+    @apply bg-vermillion text-white px-9 py-3.5 text-sm tracking-[0.12em]
+           transition-all duration-200 hover:bg-vermillion-dark hover:-translate-y-0.5
+           font-normal border-none cursor-pointer;
+  }
+
+  .btn-ghost {
+    @apply border border-charcoal text-charcoal px-9 py-3.5 text-sm
+           tracking-[0.12em] font-light transition-all duration-200
+           hover:bg-charcoal hover:text-white inline-flex items-center gap-2 cursor-pointer no-underline;
+  }
+
+  .label-section {
+    @apply text-gold text-[11px] tracking-[0.3em] uppercase font-normal;
+  }
+}
