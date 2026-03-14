@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import ItemsPanel from '../components/admin/ItemsPanel';
 import VariantsPanel from '../components/admin/VariantsPanel';
 import InquiryLogsPanel from '../components/admin/InquiryLogsPanel';
@@ -186,12 +187,12 @@ function AdminLayout() {
           </div>
 
           {/* Quick link back to store */}
-          <a
-            href="#/"
+          <Link
+            to="/"
             className="text-xs text-muted font-light hover:text-charcoal transition-colors no-underline"
           >
             ← กลับหน้าเว็บ
-          </a>
+          </Link>
         </header>
 
         {/* Content */}
