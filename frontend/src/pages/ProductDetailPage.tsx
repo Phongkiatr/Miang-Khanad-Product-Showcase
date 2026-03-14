@@ -36,28 +36,28 @@ export default function ProductDetailPage() {
   const [imgZoomed, setImgZoomed]         = useState(false);
 
   // ─── การประมวลผลข้อมูลแสดงผล (Derive values) ─────────────────────────
-  const variants = Array.isArray(item?.item_var) ? item.item_var : (item?.item_var ? [item.item_var] : []);
+  const variants = Array.isArray(item?.variants) ? item.variants : (item?.variants ? [item.variants] : []);
   const categoryLabel = item?.item_type?.name ?? 'สินค้า';
 
   // สกัดข้อมูลพื้นฐาน (ทั้งหมด)
-  const allUniqueColors = Array.from(new Set(variants.map(v => v.color).filter(Boolean)));
-  const allUniqueSizes  = Array.from(new Set(variants.map(v => v.ssize || v.tsize).filter(Boolean)));
-  const shirtSizes      = Array.from(new Set(variants.map(v => v.ssize).filter(Boolean)));
-  const instrumentSizes = Array.from(new Set(variants.map(v => v.tsize).filter(Boolean)));
+  const allUniqueColors = Array.from(new Set(variants.map((v: any) => v.color).filter(Boolean)));
+  const allUniqueSizes  = Array.from(new Set(variants.map((v: any) => v.ssize || v.tsize).filter(Boolean)));
+  const shirtSizes      = Array.from(new Set(variants.map((v: any) => v.ssize).filter(Boolean)));
+  const instrumentSizes = Array.from(new Set(variants.map((v: any) => v.tsize).filter(Boolean)));
   const hasSize         = allUniqueSizes.length > 0;
 
-  // กรองสีและไซส์ตามการเลือก (Dependent Logic)
+  // กรองตัวเลือกที่พร้อมจำหน่ายตามสีที่เลือก (Dependent Logic)
   const availableVariants = selectedColor 
-    ? variants.filter(v => v.color === selectedColor)
+    ? variants.filter((v: any) => v.color === selectedColor)
     : variants;
 
   const currentAvailableSizes = Array.from(new Set(
-    availableVariants.map(v => v.ssize || v.tsize).filter(Boolean)
+    availableVariants.map((v: any) => v.ssize || v.tsize).filter(Boolean)
   ));
 
   // ค้นหารูปภาพที่จะแสดง (ถ้าสีที่เลือกมีรูปเฉพาะ ให้ใช้รูปนั้น)
   const selectedVariant = selectedColor 
-    ? variants.find(v => v.color === selectedColor && v.imgsrc)
+    ? variants.find((v: any) => v.color === selectedColor && v.imgsrc)
     : null;
   const displayImage = selectedVariant?.imgsrc || item?.imgsrc || 'https://images.unsplash.com/photo-1511379938547-c1f69419868d?w=800&q=80';
 
@@ -70,8 +70,9 @@ export default function ProductDetailPage() {
 
   // ตั้งค่าค่าเริ่มต้นเมื่อข้อมูลสินค้าโหลดสำเร็จ
   useEffect(() => {
-    if (variants.length > 0 && variants[0].color) {
-      setSelectedColor(variants[0].color);
+    const vars = Array.isArray(item?.variants) ? item.variants : [];
+    if (vars.length > 0 && vars[0].color) {
+      setSelectedColor(vars[0].color);
     }
     setSelectedSize('');
     setImgZoomed(false);

@@ -22,7 +22,7 @@ export async function getItems(req, res) {
       .select(
         `id, created_at, name, description, price, imgsrc,
          item_type ( id, name ),
-         item_var ( id, color, ssize, tsize )`,
+         variants:item_var ( id, color, ssize, tsize, imgsrc )`,
         { count: 'exact' }
       )
       .order('created_at', { ascending: false })
@@ -61,7 +61,7 @@ export async function getItemById(req, res) {
       .select(
         `id, created_at, name, description, price, imgsrc,
          item_type ( id, name ),
-         item_var ( id, color, ssize, tsize )`
+         variants:item_var ( id, color, ssize, tsize, imgsrc )`
       )
       .eq('id', id)
       .single();

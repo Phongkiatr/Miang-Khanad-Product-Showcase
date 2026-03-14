@@ -41,7 +41,7 @@ export default function ProductCard({ item, onSelect }: ProductCardProps) {
     }
 
     // สร้างข้อความและเปิดลิงก์ LINE OA
-    const variants = Array.isArray(item.item_var) ? item.item_var : [];
+    const variants = Array.isArray(item.variants) ? item.variants : [];
     const firstColor = variants.length > 0 ? variants[0].color : undefined;
     const msg = buildLineMessage(item.name, firstColor || undefined);
     window.open(buildLineUrl(msg), '_blank', 'noopener,noreferrer');
@@ -113,11 +113,11 @@ export default function ProductCard({ item, onSelect }: ProductCardProps) {
             </h3>
             
             {/* รายละเอียดตัวเลือก (เช่น สี, ไซส์) ถ้ามีข้อมูล */}
-            {Array.isArray(item.item_var) && item.item_var.length > 0 && (
+            {Array.isArray(item.variants) && item.variants.length > 0 && (
               <p className="text-[13px] font-light text-muted mt-0.5 truncate">
                 {[
-                  ...Array.from(new Set(item.item_var.map(v => v.color).filter(Boolean))),
-                  ...Array.from(new Set(item.item_var.map(v => v.ssize || v.tsize).filter(Boolean)))
+                  ...Array.from(new Set(item.variants.map(v => v.color).filter(Boolean))),
+                  ...Array.from(new Set(item.variants.map(v => v.ssize || v.tsize).filter(Boolean)))
                 ].join(', ')}
               </p>
             )}

@@ -124,7 +124,19 @@ export default function DatabaseBrowserPanel() {
 
                       return (
                         <td key={col} className="px-4 py-3 text-xs font-light text-charcoal truncate max-w-[250px]" title={typeof val === 'object' ? JSON.stringify(val, null, 2) : display}>
-                          {display}
+                          {col === 'imgsrc' && val ? (
+                            <a 
+                              href={val} 
+                              target="_blank" 
+                              rel="noopener noreferrer" 
+                              className="inline-flex items-center gap-2 text-indigo-lanna underline underline-offset-2 hover:text-charcoal transition-colors font-medium break-all"
+                            >
+                              <img src={val} alt="" className="w-5 h-5 object-cover rounded flex-shrink-0 bg-cream-dark" />
+                              {val}
+                            </a>
+                          ) : (
+                            display
+                          )}
                         </td>
                       );
                     })}

@@ -26,7 +26,7 @@ export interface ApiItem {
   price: number;
   imgsrc: string | null;
   item_type: ApiItemType | null;
-  item_var: ApiItemVar[]; // Array of variants
+  variants: ApiItemVar[]; // Array of variants (formerly item_var)
 }
 
 /**

@@ -14,7 +14,7 @@ export async function getItemVars(req, res) {
   try {
     let query = supabase
       .from('item_var')
-      .select('id, created_at, color, ssize, tsize')
+      .select('id, created_at, color, ssize, tsize, imgsrc')
       .order('id');
 
     const { data, error } = await query;
@@ -33,7 +33,7 @@ export async function getItemVarById(req, res) {
   try {
     const { data, error } = await supabase
       .from('item_var')
-      .select('id, created_at, color, ssize, tsize')
+      .select('id, created_at, color, ssize, tsize, imgsrc')
       .eq('id', req.params.id)
       .single();
 
@@ -51,12 +51,12 @@ export async function getItemVarById(req, res) {
  */
 export async function createItemVar(req, res) {
   try {
-    const { color, ssize, tsize } = req.body;
+    const { color, ssize, tsize, imgsrc } = req.body;
 
     const { data, error } = await supabase
       .from('item_var')
-      .insert({ color, ssize, tsize })
-      .select('id, created_at, color, ssize, tsize')
+      .insert({ color, ssize, tsize, imgsrc })
+      .select('id, created_at, color, ssize, tsize, imgsrc')
       .single();
 
     if (error) return serverError(res, error.message);
@@ -72,12 +72,13 @@ export async function createItemVar(req, res) {
  */
 export async function updateItemVar(req, res) {
   try {
-    const { color, ssize, tsize } = req.body;
+    const { color, ssize, tsize, imgsrc } = req.body;
 
     const updates = {};
     if (color !== undefined) updates.color = color;
     if (ssize !== undefined) updates.ssize = ssize;
     if (tsize !== undefined) updates.tsize = tsize;
+    if (imgsrc !== undefined) updates.imgsrc = imgsrc;
 
     if (Object.keys(updates).length === 0)
       return badRequest(res, 'No fields provided to update');
@@ -86,7 +87,7 @@ export async function updateItemVar(req, res) {
       .from('item_var')
       .update(updates)
       .eq('id', req.params.id)
-      .select('id, created_at, color, ssize, tsize')
+      .select('id, created_at, color, ssize, tsize, imgsrc')
       .single();
 
     if (error && error.code === 'PGRST116') return notFound(res, 'ItemVar');

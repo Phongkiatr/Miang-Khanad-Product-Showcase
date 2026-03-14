@@ -6,16 +6,16 @@ import { formatPrice } from '../../data/mockData';
 const EMPTY_FORM = { name: '', description: '', price: '', item_type: '', imgsrc: '', variants: [] as any[] };
 
 export default function ItemsPanel() {
-  const [items, setItems]       = useState<any[]>([]);
-  const [types, setTypes]       = useState<any[]>([]);
-  const [loading, setLoading]   = useState(true);
-  const [search, setSearch]     = useState('');
-  const [form, setForm]         = useState(EMPTY_FORM);
-  const [editing, setEditing]   = useState<number | null>(null);
+  const [items, setItems] = useState<any[]>([]);
+  const [types, setTypes] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [search, setSearch] = useState('');
+  const [form, setForm] = useState(EMPTY_FORM);
+  const [editing, setEditing] = useState<number | null>(null);
   const [showModal, setShowModal] = useState(false);
   const [confirmId, setConfirmId] = useState<number | null>(null);
-  const [saving, setSaving]     = useState(false);
-  const [toast, setToast]       = useState<{ msg: string; type: 'success' | 'error' } | null>(null);
+  const [saving, setSaving] = useState(false);
+  const [toast, setToast] = useState<{ msg: string; type: 'success' | 'error' } | null>(null);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -41,10 +41,10 @@ export default function ItemsPanel() {
       name: item.name ?? '',
       description: item.description ?? '',
       price: String(item.price ?? ''),
-      item_type: String(item.item_type?.id ?? ''),
-      imgsrc: item.imgsrc ?? '',
-      variants: Array.isArray(item.item_var) ? item.item_var : (item.item_var ? [item.item_var] : []),
-    });
+      item_type: item.item_type?.id || 0,
+      imgsrc: item.imgsrc || '',
+      variants: Array.isArray(item.variants) ? item.variants.map((v: any) => ({ ...v })) : []
+    } as any);
     setEditing(item.id);
     setShowModal(true);
   };
@@ -145,8 +145,8 @@ export default function ItemsPanel() {
                   <td className="py-3 px-3 text-muted font-light">{item.item_type?.name ?? '—'}</td>
                   <td className="py-3 px-3 text-vermillion font-semibold">{formatPrice(item.price)}</td>
                   <td className="py-3 px-3 text-muted font-light text-xs">
-                    {Array.isArray(item.item_var) && item.item_var.length > 0 
-                      ? item.item_var.map((v: any) => [v.color, v.ssize, v.tsize].filter(Boolean).join('/')).join(', ')
+                    {Array.isArray(item.variants) && item.variants.length > 0
+                      ? item.variants.map((v: any) => [v.color, v.ssize, v.tsize].filter(Boolean).join('/')).join(', ')
                       : '—'}
                   </td>
                   <td className="py-3 px-3">
@@ -220,7 +220,7 @@ export default function ItemsPanel() {
             </div>
 
             <div className="h-px bg-black/10 my-2" />
-            
+
             <div className="flex flex-col gap-3">
               <div className="flex items-center justify-between">
                 <span className="text-[11px] tracking-[0.15em] uppercase text-muted font-normal">ตัวเลือกสินค้า (สี/ขนาด)</span>
@@ -242,7 +242,7 @@ export default function ItemsPanel() {
                     <Field label="สี">
                       <input
                         className="w-full px-2 py-1.5 border border-black/10 bg-cream text-xs focus:outline-none focus:border-charcoal"
-                        value={v.color} 
+                        value={v.color}
                         onChange={(e) => {
                           const newVars = [...(form as any).variants];
                           newVars[idx].color = e.target.value;
@@ -305,7 +305,7 @@ export default function ItemsPanel() {
                   </div>
                 </div>
               ))}
-              
+
               {(!(form as any).variants || (form as any).variants.length === 0) && (
                 <p className="text-xs text-muted font-light text-center py-4 bg-cream-dark/30 rounded border border-dashed border-black/10">
                   ยังไม่มีตัวเลือกสินค้า
