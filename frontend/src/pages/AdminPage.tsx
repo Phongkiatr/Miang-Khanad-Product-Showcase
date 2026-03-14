@@ -3,18 +3,20 @@ import { Link } from 'react-router-dom';
 import ItemsPanel from '../components/admin/ItemsPanel';
 import VariantsPanel from '../components/admin/VariantsPanel';
 import InquiryLogsPanel from '../components/admin/InquiryLogsPanel';
+import DatabaseBrowserPanel from '../components/admin/DatabaseBrowserPanel';
 
 // ─── Config ───────────────────────────────────────────────────────────────────
 // เปลี่ยนรหัสผ่านได้ที่นี่ หรือย้ายไปไว้ใน .env เป็น VITE_ADMIN_PASSWORD
 const ADMIN_PASSWORD = import.meta.env.VITE_ADMIN_PASSWORD ?? 'miang2025';
 const SESSION_KEY    = 'mk_admin_auth';
 
-type Tab = 'items' | 'variants' | 'logs';
+type Tab = 'items' | 'variants' | 'logs' | 'database';
 
 const TABS: { key: Tab; label: string; icon: string }[] = [
   { key: 'items',    label: 'สินค้า',              icon: '◈' },
   { key: 'variants', label: 'หมวดหมู่ & Variants', icon: '◇' },
   { key: 'logs',     label: 'Inquiry Logs',         icon: '◎' },
+  { key: 'database', label: 'Database Browser',    icon: '▤' },
 ];
 
 // ─── Password Gate ────────────────────────────────────────────────────────────
@@ -200,6 +202,7 @@ function AdminLayout() {
           {tab === 'items'    && <ItemsPanel />}
           {tab === 'variants' && <VariantsPanel />}
           {tab === 'logs'     && <InquiryLogsPanel />}
+          {tab === 'database' && <DatabaseBrowserPanel />}
         </main>
       </div>
     </div>

@@ -120,14 +120,16 @@ export default function InquiryLogsPanel() {
                   <td className="py-3 px-3 text-muted font-light">{log.id}</td>
                   <td className="py-3 px-3">
                     <div className="flex items-center gap-3">
-                      {log.items?.imgsrc && (
-                        <img src={log.items.imgsrc} alt="" className="w-8 h-8 object-cover bg-cream-dark shrink-0" />
+                      {log.Items?.imgsrc && (
+                        <img src={log.Items.imgsrc} alt="" className="w-8 h-8 object-cover bg-cream-dark shrink-0" />
                       )}
-                      <span className="font-semibold text-charcoal">{log.items?.name ?? '—'}</span>
+                      <span className="font-semibold text-charcoal">
+                        {log.Items ? `[#${log.Items.id}] ${log.Items.name}` : '—'}
+                      </span>
                     </div>
                   </td>
                   <td className="py-3 px-3 text-vermillion font-semibold">
-                    {log.items?.price ? formatPrice(log.items.price) : '—'}
+                    {log.Items?.price ? formatPrice(log.Items.price) : '—'}
                   </td>
                   <td className="py-3 px-3 text-muted font-light text-xs">
                     {new Date(log.created_at).toLocaleString('th-TH', {

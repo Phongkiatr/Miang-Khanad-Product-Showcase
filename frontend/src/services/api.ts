@@ -98,3 +98,15 @@ export async function logInquiry(itemId: number) {
     body: JSON.stringify({ items: itemId }),
   });
 }
+// ─── Generic Database Browser ──────────────────────────────────────────
+
+export async function fetchTableData(tableName: string, page: number = 1, limit: number = 100) {
+  const qs = new URLSearchParams();
+  qs.set('page', String(page));
+  qs.set('limit', String(limit));
+  
+  // tableName map (ถ้าชื่อทาง frontend ต่างจาก endpoint)
+  const endpoint = tableName.startsWith('/') ? tableName : `/api/${tableName}`;
+  
+  return apiFetch<ApiListResponse<any>>(`${endpoint}?${qs}`);
+}
