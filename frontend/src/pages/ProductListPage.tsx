@@ -1,11 +1,10 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useProducts } from '../hooks/useProducts';
 import { useItemTypes } from '../hooks/useProducts';
 import ProductCard from '../components/ProductCard';
 
-interface ProductListPageProps {
-  onNavigate: (page: string, productId?: string) => void;
-}
+// interface ProductListPageProps removed
 
 type SortOption = 'default' | 'price-asc' | 'price-desc';
 
@@ -21,7 +20,8 @@ function SkeletonCard() {
   );
 }
 
-export default function ProductListPage({ onNavigate }: ProductListPageProps) {
+export default function ProductListPage() {
+  const navigate = useNavigate();
   const [activeTypeId, setActiveTypeId] = useState<number | undefined>(undefined);
   const [search, setSearch]             = useState('');
   const [debouncedSearch, setDebouncedSearch] = useState('');
@@ -159,7 +159,7 @@ export default function ProductListPage({ onNavigate }: ProductListPageProps) {
               >
                 <ProductCard
                   item={item}
-                  onSelect={(id) => onNavigate('product-detail', String(id))}
+                  onSelect={(id) => navigate(`/product/${id}`)}
                 />
               </div>
             ))}

@@ -1,13 +1,11 @@
 import { useState, useEffect } from 'react';
+import { useParams, useNavigate, Link } from 'react-router-dom';
 import { useProduct, useProducts } from '../hooks/useProducts';
 import { logInquiry } from '../services/api';
 import { formatPrice, buildLineMessage, buildLineUrl } from '../data/mockData';
 import ProductCard from '../components/ProductCard';
 
-interface Props {
-  productId: string; // string จาก routing แต่ API ต้องการ number
-  onNavigate: (page: string, productId?: string) => void;
-}
+// interface Props removed
 
 const LineIcon = () => (
   <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
@@ -15,7 +13,9 @@ const LineIcon = () => (
   </svg>
 );
 
-export default function ProductDetailPage({ productId, onNavigate }: Props) {
+export default function ProductDetailPage() {
+  const { productId } = useParams();
+  const navigate = useNavigate();
   const numericId = Number(productId);
   const { item, loading, error } = useProduct(isNaN(numericId) ? null : numericId);
 
@@ -53,7 +53,7 @@ export default function ProductDetailPage({ productId, onNavigate }: Props) {
     <div className="pt-40 text-center text-muted min-h-[60vh] flex flex-col items-center justify-center gap-4">
       <p className="text-5xl">✦</p>
       <p className="text-base font-light">{error ?? 'ไม่พบสินค้า'}</p>
-      <button onClick={() => onNavigate('products')} className="btn-primary mt-4">
+      <button onClick={() => navigate('/products')} className="btn-primary mt-4">
         กลับไปหน้าสินค้า
       </button>
     </div>
@@ -99,20 +99,20 @@ export default function ProductDetailPage({ productId, onNavigate }: Props) {
       <div className="max-w-6xl mx-auto px-6 py-6 flex items-center gap-2 text-[13px] font-light text-muted
                        animate-fade-in opacity-0">
         {[
-          { label: 'หน้าแรก', page: 'home' },
-          { label: 'สินค้า', page: 'products' },
-          { label: item.name, page: '' },
+          { label: 'หน้าแรก', href: '/' },
+          { label: 'สินค้า', href: '/products' },
+          { label: item.name, href: '' },
         ].map((crumb, i) => (
           <span key={i} className="flex items-center gap-2">
             {i > 0 && <span className="text-black/20">›</span>}
-            {crumb.page ? (
-              <button
-                onClick={() => onNavigate(crumb.page)}
-                className="border-none bg-transparent cursor-pointer text-muted font-light
-                            text-[13px] underline underline-offset-2 hover:text-charcoal transition-colors"
+            {crumb.href ? (
+              <Link
+                to={crumb.href}
+                className="no-underline text-muted font-light
+                            text-[13px] underline underline-offset-2 hover:text-charcoal transition-colors focus:outline-none"
               >
                 {crumb.label}
-              </button>
+              </Link>
             ) : (
               <span className="text-charcoal">{crumb.label}</span>
             )}
@@ -273,7 +273,7 @@ export default function ProductDetailPage({ productId, onNavigate }: Props) {
                 <ProductCard
                   key={p.id}
                   item={p}
-                  onSelect={(id) => onNavigate('product-detail', String(id))}
+                  onSelect={(id) => navigate(`/product/${id}`)}
                 />
               ))}
           </div>

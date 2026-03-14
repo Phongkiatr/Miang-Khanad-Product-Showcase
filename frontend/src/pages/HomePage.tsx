@@ -1,12 +1,11 @@
 import { useEffect } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
 import { useProducts } from '../hooks/useProducts';
 import { ApiItem } from '../services/api';
 import { formatPrice } from '../data/mockData';
 import ProductCard from '../components/ProductCard';
 
-interface HomePageProps {
-  onNavigate: (page: string, productId?: string) => void;
-}
+// interface HomePageProps removed
 
 const LineIcon = () => (
   <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
@@ -27,7 +26,8 @@ function SkeletonCard() {
   );
 }
 
-export default function HomePage({ onNavigate }: HomePageProps) {
+export default function HomePage() {
+  const navigate = useNavigate();
   // ดึงแค่ 3 ชิ้นแรกเพื่อแสดงเป็น featured
   const { items: featured, loading } = useProducts({ limit: 3 });
 
@@ -61,7 +61,7 @@ export default function HomePage({ onNavigate }: HomePageProps) {
           </p>
 
           <div className="animate-fade-in opacity-0 delay-500 flex flex-wrap gap-4">
-            <button onClick={() => onNavigate('products')} className="btn-primary">
+            <button onClick={() => navigate('/products')} className="btn-primary">
               เลือกดูสินค้า
             </button>
             <a
@@ -172,14 +172,14 @@ export default function HomePage({ onNavigate }: HomePageProps) {
               สินค้าเด่น
             </h2>
           </div>
-          <button
-            onClick={() => onNavigate('products')}
+          <Link
+            to="/products"
             className="text-sm font-light text-charcoal tracking-wide underline
-                       underline-offset-4 border-none bg-transparent cursor-pointer
+                       underline-offset-4 no-underline border-none bg-transparent cursor-pointer
                        hover:text-vermillion transition-colors duration-200"
           >
             ดูทั้งหมด →
-          </button>
+          </Link>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-14">
@@ -189,7 +189,7 @@ export default function HomePage({ onNavigate }: HomePageProps) {
                 <ProductCard
                   key={item.id}
                   item={item}
-                  onSelect={(id) => onNavigate('product-detail', String(id))}
+                  onSelect={(id) => navigate(`/product/${id}`)}
                 />
               ))}
         </div>

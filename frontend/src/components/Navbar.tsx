@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 
 interface NavbarProps {
-  currentPage: string;
-  onNavigate: (page: string) => void;
+  // Props removed to use hooks instead
 }
 
 const LineIcon = () => (
@@ -11,9 +11,10 @@ const LineIcon = () => (
   </svg>
 );
 
-export default function Navbar({ currentPage, onNavigate }: NavbarProps) {
+export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const location = useLocation();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);
@@ -22,9 +23,14 @@ export default function Navbar({ currentPage, onNavigate }: NavbarProps) {
   }, []);
 
   const links = [
-    { key: 'home', label: 'หน้าแรก' },
-    { key: 'products', label: 'สินค้า' },
+    { href: '/', label: 'หน้าแรก' },
+    { href: '/products', label: 'สินค้า' },
   ];
+
+  const isCurrentPage = (href: string) => {
+    if (href === '/') return location.pathname === '/';
+    return location.pathname.startsWith(href);
+  };
 
   return (
     <nav
@@ -36,9 +42,9 @@ export default function Navbar({ currentPage, onNavigate }: NavbarProps) {
       <div className="max-w-6xl mx-auto px-6 flex items-center justify-between">
 
         {/* Brand */}
-        <button
-          onClick={() => onNavigate('home')}
-          className="flex flex-col items-start gap-0.5 border-none bg-transparent cursor-pointer"
+        <Link
+          to="/"
+          className="flex flex-col items-start gap-0.5 border-none bg-transparent cursor-pointer no-underline"
         >
           <span className="text-[22px] font-bold text-charcoal tracking-wide leading-none">
             เมียงขนาด
@@ -46,25 +52,25 @@ export default function Navbar({ currentPage, onNavigate }: NavbarProps) {
           <span className="text-[10px] font-light text-gold tracking-[0.3em] uppercase">
             MIANG KHANAD
           </span>
-        </button>
+        </Link>
 
         {/* Desktop links */}
         <div className="hidden md:flex items-center gap-10">
           {links.map((link) => (
-            <button
-              key={link.key}
-              onClick={() => onNavigate(link.key)}
-              className={`relative pb-1 text-[15px] tracking-wide border-none bg-transparent cursor-pointer
+            <Link
+              key={link.href}
+              to={link.href}
+              className={`relative pb-1 text-[15px] tracking-wide no-underline
                           transition-colors duration-200
-                          ${currentPage === link.key
+                          ${isCurrentPage(link.href)
                             ? 'text-vermillion font-semibold'
                             : 'text-charcoal font-light hover:text-vermillion'}`}
             >
               {link.label}
-              {currentPage === link.key && (
+              {isCurrentPage(link.href) && (
                 <span className="absolute bottom-0 inset-x-0 h-px bg-vermillion" />
               )}
-            </button>
+            </Link>
           ))}
 
           <a
@@ -106,16 +112,17 @@ export default function Navbar({ currentPage, onNavigate }: NavbarProps) {
       {menuOpen && (
         <div className="md:hidden bg-cream border-t border-black/10 px-6 py-6 flex flex-col gap-5">
           {links.map((link) => (
-            <button
-              key={link.key}
-              onClick={() => { onNavigate(link.key); setMenuOpen(false); }}
-              className={`text-left text-lg border-none bg-transparent cursor-pointer
-                          ${currentPage === link.key
+            <Link
+              key={link.href}
+              to={link.href}
+              onClick={() => setMenuOpen(false)}
+              className={`text-left text-lg no-underline
+                          ${isCurrentPage(link.href)
                             ? 'text-vermillion font-semibold'
                             : 'text-charcoal font-light'}`}
             >
               {link.label}
-            </button>
+            </Link>
           ))}
           <a
             href="https://line.me/R/ti/p/@miang-khanad"
