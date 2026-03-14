@@ -10,6 +10,7 @@ export interface ApiItemVar {
   color: string | null;
   ssize: string | null; // shirt size
   tsize: string | null; // instrument size / other
+  imgsrc: string | null; // image for this specific variant
 }
 
 export interface ApiItemType {

@@ -55,6 +55,12 @@ export default function ProductDetailPage() {
     availableVariants.map(v => v.ssize || v.tsize).filter(Boolean)
   ));
 
+  // ค้นหารูปภาพที่จะแสดง (ถ้าสีที่เลือกมีรูปเฉพาะ ให้ใช้รูปนั้น)
+  const selectedVariant = selectedColor 
+    ? variants.find(v => v.color === selectedColor && v.imgsrc)
+    : null;
+  const displayImage = selectedVariant?.imgsrc || item?.imgsrc || 'https://images.unsplash.com/photo-1511379938547-c1f69419868d?w=800&q=80';
+
   // ตรวจสอบความถูกต้องของไซส์ที่เลือกเมื่อเปลี่ยนสี
   useEffect(() => {
     if (selectedSize && !currentAvailableSizes.includes(selectedSize)) {
@@ -169,7 +175,7 @@ export default function ProductDetailPage() {
             onClick={() => setImgZoomed(!imgZoomed)}
           >
             <img
-              src={item.imgsrc ?? 'https://images.unsplash.com/photo-1511379938547-c1f69419868d?w=800&q=80'}
+              src={displayImage}
               alt={item.name}
               className={`w-full h-full object-cover transition-transform duration-500
                            ${imgZoomed ? 'scale-110' : 'scale-100'}`}

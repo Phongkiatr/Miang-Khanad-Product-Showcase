@@ -237,53 +237,72 @@ export default function ItemsPanel() {
               </div>
 
               {((form as any).variants || []).map((v: any, idx: number) => (
-                <div key={idx} className="grid grid-cols-4 gap-2 items-end bg-cream-dark/50 p-3 rounded border border-black/5">
-                  <Field label="สี">
-                    <input
-                      className="w-full px-2 py-1.5 border border-black/10 bg-cream text-xs focus:outline-none focus:border-charcoal"
-                      value={v.color} 
-                      onChange={(e) => {
-                        const newVars = [...(form as any).variants];
-                        newVars[idx].color = e.target.value;
+                <div key={idx} className="bg-cream-dark/50 p-3 rounded border border-black/5 flex flex-col gap-3">
+                  <div className="grid grid-cols-4 gap-2 items-end">
+                    <Field label="สี">
+                      <input
+                        className="w-full px-2 py-1.5 border border-black/10 bg-cream text-xs focus:outline-none focus:border-charcoal"
+                        value={v.color} 
+                        onChange={(e) => {
+                          const newVars = [...(form as any).variants];
+                          newVars[idx].color = e.target.value;
+                          setForm({ ...form, variants: newVars } as any);
+                        }}
+                        placeholder="เช่น คราม"
+                      />
+                    </Field>
+                    <Field label="ไซส์เครื่องดนตรี">
+                      <input
+                        className="w-full px-2 py-1.5 border border-black/10 bg-cream text-xs focus:outline-none focus:border-charcoal"
+                        value={v.tsize}
+                        onChange={(e) => {
+                          const newVars = [...(form as any).variants];
+                          newVars[idx].tsize = e.target.value;
+                          setForm({ ...form, variants: newVars } as any);
+                        }}
+                        placeholder="เช่น เล็ก"
+                      />
+                    </Field>
+                    <Field label="ไซส์เสื้อ">
+                      <input
+                        className="w-full px-2 py-1.5 border border-black/10 bg-cream text-xs focus:outline-none focus:border-charcoal"
+                        value={v.ssize}
+                        onChange={(e) => {
+                          const newVars = [...(form as any).variants];
+                          newVars[idx].ssize = e.target.value;
+                          setForm({ ...form, variants: newVars } as any);
+                        }}
+                        placeholder="เช่น M"
+                      />
+                    </Field>
+                  </div>
+                  <div className="flex gap-2 items-end">
+                    <div className="flex-1">
+                      <Field label="URL รูปภาพเฉพาะสีนี้ (เว้นว่างไว้ถ้าใช้รูปหลัก)">
+                        <input
+                          className="w-full px-2 py-1.5 border border-black/10 bg-cream text-xs focus:outline-none focus:border-charcoal"
+                          value={v.imgsrc || ''}
+                          onChange={(e) => {
+                            const newVars = [...(form as any).variants];
+                            newVars[idx].imgsrc = e.target.value;
+                            setForm({ ...form, variants: newVars } as any);
+                          }}
+                          placeholder="https://example.com/image.jpg"
+                        />
+                      </Field>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const newVars = (form as any).variants.filter((_: any, i: number) => i !== idx);
                         setForm({ ...form, variants: newVars } as any);
                       }}
-                      placeholder="เช่น คราม"
-                    />
-                  </Field>
-                  <Field label="ไซส์เครื่องดนตรี">
-                    <input
-                      className="w-full px-2 py-1.5 border border-black/10 bg-cream text-xs focus:outline-none focus:border-charcoal"
-                      value={v.tsize}
-                      onChange={(e) => {
-                        const newVars = [...(form as any).variants];
-                        newVars[idx].tsize = e.target.value;
-                        setForm({ ...form, variants: newVars } as any);
-                      }}
-                      placeholder="เช่น เล็ก"
-                    />
-                  </Field>
-                  <Field label="ไซส์เสื้อ">
-                    <input
-                      className="w-full px-2 py-1.5 border border-black/10 bg-cream text-xs focus:outline-none focus:border-charcoal"
-                      value={v.ssize}
-                      onChange={(e) => {
-                        const newVars = [...(form as any).variants];
-                        newVars[idx].ssize = e.target.value;
-                        setForm({ ...form, variants: newVars } as any);
-                      }}
-                      placeholder="เช่น M"
-                    />
-                  </Field>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      const newVars = (form as any).variants.filter((_: any, i: number) => i !== idx);
-                      setForm({ ...form, variants: newVars } as any);
-                    }}
-                    className="mb-1 text-vermillion hover:text-white hover:bg-vermillion border border-vermillion/20 py-1 transition-colors text-[10px]"
-                  >
-                    ลบ
-                  </button>
+                      className="px-4 py-1.5 border border-vermillion/20 text-vermillion bg-transparent
+                                 hover:bg-vermillion hover:text-white transition-colors text-xs font-medium rounded"
+                    >
+                      ลบตัวเลือกนี้
+                    </button>
+                  </div>
                 </div>
               ))}
               

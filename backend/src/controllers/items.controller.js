@@ -147,10 +147,11 @@ export async function updateItem(req, res) {
       // 2. Insert new variants
       if (variants.length > 0) {
         const varsToInsert = variants.map(v => ({
-          color: v.color,
-          ssize: v.ssize,
-          tsize: v.tsize,
-          item_id: id
+          item_id: id,
+          color: v.color || null,
+          ssize: v.ssize || null,
+          tsize: v.tsize || null,
+          imgsrc: v.imgsrc || null
         }));
         await supabase.from('item_var').insert(varsToInsert);
       }
