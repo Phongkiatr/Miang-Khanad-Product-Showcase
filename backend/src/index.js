@@ -1,6 +1,7 @@
 import 'dotenv/config'; // Load environment variables
 import express from 'express';
 import cors from 'cors';
+import helmet from 'helmet';
 import morgan from 'morgan';
 
 // Route imports
@@ -16,6 +17,7 @@ const app  = express();
 const PORT = process.env.PORT || 3001;
 
 // ─── Middleware ───────────────────────────────────────────────────────────────
+app.use(helmet());
 
 // CORS: Allow cross-origin requests from specific origins
 app.use(cors({
