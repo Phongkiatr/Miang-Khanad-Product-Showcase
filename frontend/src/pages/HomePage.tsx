@@ -13,7 +13,12 @@ const LineIcon = () => (
   </svg>
 );
 
-// Skeleton card สำหรับ loading state
+/**
+ * HomePage Component
+ * หน้าแรกของเว็บไซต์ - แสดง Hero Section, เรื่องราวของแบรนด์ และสินค้าแนะนำ
+ */
+
+// Skeleton card สำหรับแสดงสถานะรอโหลดข้อมูล (Loading State)
 function SkeletonCard() {
   return (
     <div className="flex flex-col gap-0 animate-pulse">
@@ -28,20 +33,22 @@ function SkeletonCard() {
 
 export default function HomePage() {
   const navigate = useNavigate();
-  // ดึงแค่ 3 ชิ้นแรกเพื่อแสดงเป็น featured
+  
+  // ดึงข้อมูลสินค้า 3 ชิ้นแรกจาก API เพื่อแสดงเป็นสินค้าแนะนำ (Featured)
   const { items: featured, loading } = useProducts({ limit: 3 });
 
+  // เลื่อนขึ้นไปด้านบนสุดเมื่อเข้าหน้านี้
   useEffect(() => { window.scrollTo({ top: 0, behavior: 'smooth' }); }, []);
 
-  // ใช้ชิ้นแรกสำหรับ hero floating card
+  // เลือกสินค้าชิ้นแรกมาแสดงใน Floating Card ของส่วน Hero
   const heroItem: ApiItem | undefined = featured[0];
 
   return (
     <div>
-      {/* ─── HERO ─── */}
+      {/* ─── ส่วน Hero: แนะนำแบรนด์และ Call to Action ─── */}
       <section className="min-h-svh grid grid-cols-1 md:grid-cols-2 relative overflow-hidden">
 
-        {/* Left: Text */}
+        {/* ฝั่งซ้าย: ข้อความและปุ่มนำทาง */}
         <div className="flex flex-col justify-end px-7 md:px-14 pt-36 pb-20 z-10 relative">
           <div className="animate-fade-in opacity-0 flex items-center gap-3 mb-8">
             <span className="block w-8 h-px bg-gold" />
@@ -74,7 +81,7 @@ export default function HomePage() {
             </a>
           </div>
 
-          {/* Stats */}
+          {/* สถิติหรือจุดเด่นของแบรนด์ */}
           <div className="animate-fade-in opacity-0 delay-600 flex gap-10 mt-16 pt-10 border-t border-black/10">
             {[
               { num: '10+', label: 'ปีแห่งประสบการณ์' },
@@ -89,7 +96,7 @@ export default function HomePage() {
           </div>
         </div>
 
-        {/* Right: Hero image */}
+        {/* ฝั่งขวา: รูปภาพ Hero และ Floating Card สำหรับ Desktop */}
         <div className="relative overflow-hidden md:block hidden animate-scale-in opacity-0 delay-100">
           <img
             src="https://images.unsplash.com/photo-1558769132-cb1aea458c5e?w=1200&q=85"
@@ -98,7 +105,7 @@ export default function HomePage() {
           />
           <div className="absolute inset-0 bg-gradient-to-r from-cream via-cream/30 to-transparent" />
 
-          {/* Floating card — แสดงข้อมูลจาก API ถ้ามี หรือ fallback */}
+          {/* Floating Card: ดึงข้อมูลสินค้าจริงมาแสดงบางส่วน */}
           <div className="animate-fade-in opacity-0 delay-600 absolute bottom-20 left-10
                            bg-white px-6 py-5 shadow-[0_8px_40px_rgba(0,0,0,0.12)]">
             <p className="text-[11px] text-muted tracking-[0.2em] mb-1">สินค้าแนะนำ</p>
@@ -120,7 +127,7 @@ export default function HomePage() {
           </div>
         </div>
 
-        {/* Mobile bg */}
+        {/* ฉากหลังสำหรับหน้าจอขนาดเล็ก (Mobile) */}
         <div className="md:hidden absolute inset-0 -z-10 opacity-15">
           <img
             src="https://images.unsplash.com/photo-1558769132-cb1aea458c5e?w=800&q=70"
@@ -129,7 +136,7 @@ export default function HomePage() {
           />
         </div>
 
-        {/* Scroll indicator */}
+        {/* ตัวบอกใบ้การเลื่อนหน้า (Scroll Indicator) */}
         <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 z-10
                          animate-fade-in opacity-0 delay-600">
           <span className="text-[10px] tracking-[0.3em] text-muted uppercase">เลื่อนลง</span>
@@ -137,7 +144,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ─── BRAND STORY ─── */}
+      {/* ─── ส่วน Brand Story: เล่าเรื่องราวความเป็นมาของแบรนด์ ─── */}
       <section className="py-28 px-6 bg-charcoal text-white relative overflow-hidden">
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2
                          text-[clamp(80px,20vw,200px)] font-black text-white/[0.03]
@@ -163,7 +170,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ─── FEATURED ─── */}
+      {/* ─── ส่วนสินค้าแนะนำ (Featured Products) ─── */}
       <section className="py-28 px-6 max-w-6xl mx-auto">
         <div className="flex justify-between items-end mb-16 flex-wrap gap-6">
           <div>
@@ -195,7 +202,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ─── LINE CTA ─── */}
+      {/* ─── ส่วนทิ้งท้าย: ช่องทางการติดต่อ LINE OA ─── */}
       <section className="bg-indigo-lanna py-20 px-6 text-center">
         <p className="text-[12px] tracking-[0.3em] text-white/50 uppercase mb-5">พร้อมให้บริการ 7 วัน</p>
         <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white mb-8">

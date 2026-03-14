@@ -9,9 +9,14 @@ import {
   deleteItem,
 } from '../controllers/items.controller.js';
 
+/**
+ * Items Routes
+ * Defines endpoints for product management including CRUD operations and search.
+ */
+
 const router = Router();
 
-// GET /api/items
+// GET /api/items - Fetch products with filtering and pagination
 router.get(
   '/',
   [
@@ -24,7 +29,7 @@ router.get(
   getItems
 );
 
-// GET /api/items/:id
+// GET /api/items/:id - Fetch a single product by ID
 router.get(
   '/:id',
   [param('id').isInt({ min: 1 }).toInt()],
@@ -32,7 +37,7 @@ router.get(
   getItemById
 );
 
-// POST /api/items
+// POST /api/items - Create a new product (Admin)
 router.post(
   '/',
   [
@@ -47,7 +52,7 @@ router.post(
   createItem
 );
 
-// PATCH /api/items/:id
+// PATCH /api/items/:id - Update an existing product (Admin)
 router.patch(
   '/:id',
   [
@@ -63,7 +68,7 @@ router.patch(
   updateItem
 );
 
-// DELETE /api/items/:id
+// DELETE /api/items/:id - Remove a product (Admin)
 router.delete(
   '/:id',
   [param('id').isInt({ min: 1 }).toInt()],

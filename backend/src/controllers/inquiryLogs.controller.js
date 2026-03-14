@@ -3,8 +3,8 @@ import { ok, created, noContent, notFound, serverError } from '../middleware/res
 
 /**
  * GET /api/inquiry-logs
- * ดึงรายการประวัติการสอบถามทั้งหมดแบบแบ่งหน้า (Pagination)
- * รองรับการกรองตามรหัสสินค้า (item_id)
+ * Fetch all inquiry logs with pagination.
+ * Supports filtering by item_id.
  */
 export async function getInquiryLogs(req, res) {
   try {
@@ -44,7 +44,7 @@ export async function getInquiryLogs(req, res) {
 
 /**
  * GET /api/inquiry-logs/:id
- * ดึงข้อมูลประวัติการสอบถามเพียงรายการเดียวตาม ID
+ * Fetch a single inquiry log by ID.
  */
 export async function getInquiryLogById(req, res) {
   try {
@@ -66,11 +66,11 @@ export async function getInquiryLogById(req, res) {
 
 /**
  * POST /api/inquiry-logs
- * สร้างบันทึกใหม่เมื่อลูกค้ากดปุ่ม "สั่งซื้อผ่าน Line" ในหน้าเว็บ
+ * Create a new log entry when a customer clicks "Contact via LINE".
  */
 export async function createInquiryLog(req, res) {
   try {
-    const { items: itemId } = req.body; // รับ ID ของสินค้าที่ลูกค้าสนใจ
+    const { items: itemId } = req.body; // item/product ID
 
     const { data, error } = await supabase
       .from('inquiry_logs')
@@ -90,7 +90,7 @@ export async function createInquiryLog(req, res) {
 
 /**
  * DELETE /api/inquiry-logs/:id
- * ลบประวัติการสอบถาม (Admin Only)
+ * Delete an inquiry log (Admin Only).
  */
 export async function deleteInquiryLog(req, res) {
   try {
@@ -108,25 +108,25 @@ export async function deleteInquiryLog(req, res) {
 
 /**
  * GET /api/inquiry-logs/stats
- * สรุปสถิติการสอบถาม: จำนวนทั้งหมด และ 5 อันดับสินค้ายอดนิยม
+ * Get inquiry statistics: total count and top 5 inquired items.
  */
 export async function getInquiryStats(req, res) {
   try {
-    // 1. ดึงจำนวน Total Inquiry ทั้งหมด
+    // 1. Get total record count
     const { count: total, error: countErr } = await supabase
       .from('inquiry_logs')
       .select('*', { count: 'exact', head: true });
 
     if (countErr) return serverError(res, countErr.message);
 
-    // 2. ดึงข้อมูลทั้งหมดมาประมวลผล Top Items (เนื่องจาก Supabase Free Tier ไม่รองรับ Group By ตรงๆ)
+    // 2. Fetch all logs to compute top items (Supabase JS client lacks GROUP BY)
     const { data: logs, error: logsErr } = await supabase
       .from('inquiry_logs')
       .select('Items ( id, name )');
 
     if (logsErr) return serverError(res, logsErr.message);
 
-    // ประมวลผลข้อมูลเพื่อนับจำนวนการสอบถามแยกตามสินค้า
+    // Tally item counts manually
     const tally = {};
     for (const log of logs) {
       const item = log.Items;
@@ -136,7 +136,7 @@ export async function getInquiryStats(req, res) {
       tally[key].inquiry_count++;
     }
 
-    // เรียงลำดับและเลือกมาแค่ 5 อันดับแรก
+    // Sort to get top 5
     const topItems = Object.values(tally)
       .sort((a, b) => b.inquiry_count - a.inquiry_count)
       .slice(0, 5);

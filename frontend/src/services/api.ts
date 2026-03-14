@@ -1,4 +1,9 @@
-// ─── Types ที่ตรงกับ Backend Schema ──────────────────────────────────────────
+/**
+ * API Service Layer
+ * Handles communication with the backend API.
+ */
+
+// ─── Backend Schema Types ──────────────────────────────────────────────────
 
 export interface ApiItemVar {
   id: number;
@@ -23,6 +28,9 @@ export interface ApiItem {
   item_var: ApiItemVar | null;
 }
 
+/**
+ * Standardized Pagination Response from API
+ */
 export interface ApiListResponse<T> {
   success: boolean;
   data: T[];
@@ -39,10 +47,13 @@ export interface ApiSingleResponse<T> {
   data: T;
 }
 
-// ─── Config ───────────────────────────────────────────────────────────────────
+// ─── API Configuration ──────────────────────────────────────────────────────
 
 const BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
 
+/**
+ * Custom fetch wrapper with error handling and default headers
+ */
 async function apiFetch<T>(path: string, options?: RequestInit): Promise<T> {
   const res = await fetch(`${BASE_URL}${path}`, {
     headers: { 'Content-Type': 'application/json' },
@@ -57,7 +68,7 @@ async function apiFetch<T>(path: string, options?: RequestInit): Promise<T> {
   return res.json();
 }
 
-// ─── Items ────────────────────────────────────────────────────────────────────
+// ─── Item Endpoints ──────────────────────────────────────────────────────────
 
 export interface GetItemsParams {
   page?: number;
@@ -66,6 +77,9 @@ export interface GetItemsParams {
   search?: string;
 }
 
+/**
+ * Fetch products with pagination and filters
+ */
 export async function fetchItems(params: GetItemsParams = {}) {
   const qs = new URLSearchParams();
   if (params.page)     qs.set('page',     String(params.page));
@@ -77,20 +91,27 @@ export async function fetchItems(params: GetItemsParams = {}) {
   return apiFetch<ApiListResponse<ApiItem>>(`/api/items${query}`);
 }
 
+/**
+ * Fetch a single product by ID
+ */
 export async function fetchItemById(id: number) {
   return apiFetch<ApiSingleResponse<ApiItem>>(`/api/items/${id}`);
 }
 
-// ─── Item Types ───────────────────────────────────────────────────────────────
+// ─── Category Endpoints ──────────────────────────────────────────────────────
 
+/**
+ * Fetch all product categories
+ */
 export async function fetchItemTypes() {
   return apiFetch<ApiSingleResponse<ApiItemType[]>>('/api/item-types');
 }
 
-// ─── Inquiry Logs ─────────────────────────────────────────────────────────────
+// ─── Inquiry Logging ──────────────────────────────────────────────────────────
 
 /**
- * เรียกก่อนเปิด Line OA ทุกครั้ง เพื่อ log ว่าลูกค้าสนใจสินค้าชิ้นไหน
+ * Records a customer's interest in a specific item.
+ * Called immediately before redirection to LINE OA.
  */
 export async function logInquiry(itemId: number) {
   return apiFetch('/api/inquiry-logs', {
@@ -98,14 +119,18 @@ export async function logInquiry(itemId: number) {
     body: JSON.stringify({ items: itemId }),
   });
 }
-// ─── Generic Database Browser ──────────────────────────────────────────
 
+// ─── Admin Tools ─────────────────────────────────────────────────────────────
+
+/**
+ * Generic fetcher for the Database Browser panel
+ */
 export async function fetchTableData(tableName: string, page: number = 1, limit: number = 100) {
   const qs = new URLSearchParams();
   qs.set('page', String(page));
   qs.set('limit', String(limit));
   
-  // tableName map (ถ้าชื่อทาง frontend ต่างจาก endpoint)
+  // Resolve endpoint name from table identifier
   const endpoint = tableName.startsWith('/') ? tableName : `/api/${tableName}`;
   
   return apiFetch<ApiListResponse<any>>(`${endpoint}?${qs}`);

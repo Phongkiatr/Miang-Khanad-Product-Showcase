@@ -8,6 +8,12 @@ import ProductCard from '../components/ProductCard';
 
 type SortOption = 'default' | 'price-asc' | 'price-desc';
 
+/**
+ * ProductListPage Component
+ * หน้าแสดงรายการสินค้าทั้งหมด พร้อมระบบกรองตามหมวดหมู่, ค้นหา และการแบ่งหน้า (Pagination)
+ */
+
+// Skeleton แสดงตอนรอโหลดข้อมูลเข้า Grid
 function SkeletonCard() {
   return (
     <div className="flex flex-col gap-0 animate-pulse">
@@ -22,21 +28,23 @@ function SkeletonCard() {
 
 export default function ProductListPage() {
   const navigate = useNavigate();
+  // State สำหรับจัดการ Filters และ Search
   const [activeTypeId, setActiveTypeId] = useState<number | undefined>(undefined);
   const [search, setSearch]             = useState('');
   const [debouncedSearch, setDebouncedSearch] = useState('');
   const [sortBy, setSortBy]             = useState<SortOption>('default');
   const [page, setPage]                 = useState(1);
 
-  // Debounce search input 400ms
+  // ระบบ Debounce สำหรับช่องค้นหา เพื่อลดจำนวนการยิง API
   useEffect(() => {
     const t = setTimeout(() => { setDebouncedSearch(search); setPage(1); }, 400);
     return () => clearTimeout(t);
   }, [search]);
 
-  // รีเซ็ต page เมื่อเปลี่ยน filter
+  // รีเซ็ตหน้ากลับไปลำดับแรกเมื่อมีการเปลี่ยนหมวดหมู่
   useEffect(() => { setPage(1); }, [activeTypeId]);
 
+  // Hook สำหรับดึงข้อมูลสินค้าจาก Backend ตามเงื่อนไขปัจจุบัน
   const { items, loading, error, total, totalPages } = useProducts({
     category: activeTypeId,
     search: debouncedSearch || undefined,
@@ -44,11 +52,12 @@ export default function ProductListPage() {
     limit: 12,
   });
 
+  // Hook สำหรับดึงรายการหมวดหมู่สินค้าทั้งหมดมาทำเป็นเมนูกรอง
   const { itemTypes } = useItemTypes();
 
   useEffect(() => { window.scrollTo({ top: 0, behavior: 'smooth' }); }, []);
 
-  // Client-side sort (backend ยังไม่รองรับ sort by price)
+  // การเรียงลำดับฝั่ง Client-side (เนื่องจาก Backend เบื้องต้นยังไม่รองรับการ Sort)
   const sorted = [...items].sort((a, b) =>
     sortBy === 'price-asc'  ? a.price - b.price
     : sortBy === 'price-desc' ? b.price - a.price
@@ -57,7 +66,7 @@ export default function ProductListPage() {
 
   return (
     <div className="pt-24 min-h-screen">
-      {/* Header */}
+      {/* ส่วนหัวของหน้าและระบบตัวกรอง */}
       <div className="max-w-6xl mx-auto px-6 pt-16">
         <p className="animate-fade-in opacity-0 label-section mb-3">คอลเลกชัน</p>
         <h1 className="animate-slide-up opacity-0 delay-100 font-bold text-charcoal leading-tight mb-10
@@ -65,11 +74,11 @@ export default function ProductListPage() {
           สินค้าทั้งหมด
         </h1>
 
-        {/* Filters */}
+        {/* แถบเครื่องมือ: กรองตามหมวดหมู่ / ค้นหา / เรียงราคา */}
         <div className="animate-fade-in opacity-0 delay-200 flex flex-wrap justify-between items-center
                          gap-5 pb-8 border-b border-black/10 mb-14">
           <div className="flex flex-wrap gap-2 items-center">
-            {/* ปุ่ม "ทั้งหมด" */}
+            {/* ปุ่มแสดงสินค้าทั้งหมด */}
             <button
               onClick={() => setActiveTypeId(undefined)}
               className={`px-5 py-2.5 text-sm tracking-wide border transition-all duration-200 cursor-pointer
@@ -80,7 +89,7 @@ export default function ProductListPage() {
               ทั้งหมด
             </button>
 
-            {/* ปุ่มตาม item_type จาก API */}
+            {/* ปุ่มกรองแยกตามประเภทที่ได้จาก API */}
             {itemTypes.map((type) => (
               <button
                 key={type.id}
@@ -96,7 +105,7 @@ export default function ProductListPage() {
           </div>
 
           <div className="flex items-center gap-3 flex-wrap">
-            {/* Search */}
+            {/* กล่องค้นหาตามชื่อสินค้า */}
             <input
               type="text"
               value={search}
@@ -107,7 +116,7 @@ export default function ProductListPage() {
                           w-40 sm:w-52"
             />
 
-            {/* Sort */}
+            {/* เมนูเลือกการเรียงลำดับราคาสินค้า */}
             <select
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value as SortOption)}
@@ -127,13 +136,13 @@ export default function ProductListPage() {
           </div>
         </div>
 
-        {/* Result count */}
+        {/* แสดงจำนวนผลลัพธ์ที่พบ */}
         <p className="text-[13px] text-muted font-light mb-10 tracking-wide">
           {loading ? 'กำลังโหลด...' : `แสดง ${items.length} จาก ${total} รายการ`}
         </p>
       </div>
 
-      {/* Grid */}
+      {/* Grid แสดงการ์ดสินค้า */}
       <div className="max-w-6xl mx-auto px-6 pb-20">
         {error ? (
           <div className="text-center py-32 text-vermillion">
@@ -167,7 +176,7 @@ export default function ProductListPage() {
         )}
       </div>
 
-      {/* Pagination */}
+      {/* ส่วนควบคุมการเลือกหน้า (Pagination) */}
       {!loading && totalPages > 1 && (
         <div className="flex justify-center gap-2 pb-20">
           <button

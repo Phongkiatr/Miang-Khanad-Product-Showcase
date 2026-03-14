@@ -9,10 +9,17 @@ import {
   deleteItemType,
 } from '../controllers/itemTypes.controller.js';
 
+/**
+ * ItemTypes Routes
+ * Defines endpoints for category management.
+ */
+
 const router = Router();
 
+// GET /api/item-types - Fetch all categories
 router.get('/', getItemTypes);
 
+// GET /api/item-types/:id - Fetch category details
 router.get(
   '/:id',
   [param('id').isInt({ min: 1 }).toInt()],
@@ -20,6 +27,7 @@ router.get(
   getItemTypeById
 );
 
+// POST /api/item-types - Create category
 router.post(
   '/',
   [body('name').notEmpty().withMessage('name is required').trim()],
@@ -27,6 +35,7 @@ router.post(
   createItemType
 );
 
+// PATCH /api/item-types/:id - Update category
 router.patch(
   '/:id',
   [
@@ -37,6 +46,7 @@ router.patch(
   updateItemType
 );
 
+// DELETE /api/item-types/:id - Remove category
 router.delete(
   '/:id',
   [param('id').isInt({ min: 1 }).toInt()],

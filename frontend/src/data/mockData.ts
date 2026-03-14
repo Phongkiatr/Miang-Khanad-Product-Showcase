@@ -1,5 +1,12 @@
+/**
+ * Product Data Models and Mock Constants
+ */
+
 export type Category = 'clothing' | 'instrument';
 
+/**
+ * Visual variant of a product (e.g., specific wood type or clothing size)
+ */
 export interface ProductVariant {
   id: string;
   color: string;
@@ -8,6 +15,9 @@ export interface ProductVariant {
   stock: number;
 }
 
+/**
+ * Core product structure for frontend display
+ */
 export interface Product {
   id: string;
   name: string;
@@ -23,6 +33,9 @@ export interface Product {
   featured?: boolean;
 }
 
+/**
+ * Hardcoded product list for initial development and fallback
+ */
 export const PRODUCTS: Product[] = [
   {
     id: 'salaw-premium-01',

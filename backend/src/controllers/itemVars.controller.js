@@ -1,8 +1,15 @@
 import { supabase } from '../config/supabase.js';
-import { ok, created, noContent, notFound, serverError, badRequest } from '../middleware/response.js';
+import { ok, created, noContent, badRequest, notFound, serverError } from '../middleware/response.js';
 
-// GET /api/item-vars
-// Optional query: ?item_id=x  (filter variants that belong to a specific item)
+/**
+ * ItemVars Controller
+ * Manages product variants (e.g., Color, Size).
+ */
+
+/**
+ * GET /api/item-vars
+ * Fetch all available product variants.
+ */
 export async function getItemVars(req, res) {
   try {
     let query = supabase
@@ -18,7 +25,10 @@ export async function getItemVars(req, res) {
   }
 }
 
-// GET /api/item-vars/:id
+/**
+ * GET /api/item-vars/:id
+ * Fetch a specific variant by ID.
+ */
 export async function getItemVarById(req, res) {
   try {
     const { data, error } = await supabase
@@ -35,8 +45,10 @@ export async function getItemVarById(req, res) {
   }
 }
 
-// POST /api/item-vars
-// Body: { color, ssize, tsize }
+/**
+ * POST /api/item-vars
+ * Create a new product variant.
+ */
 export async function createItemVar(req, res) {
   try {
     const { color, ssize, tsize } = req.body;
@@ -54,7 +66,10 @@ export async function createItemVar(req, res) {
   }
 }
 
-// PATCH /api/item-vars/:id
+/**
+ * PATCH /api/item-vars/:id
+ * Update an existing product variant.
+ */
 export async function updateItemVar(req, res) {
   try {
     const { color, ssize, tsize } = req.body;
@@ -82,7 +97,10 @@ export async function updateItemVar(req, res) {
   }
 }
 
-// DELETE /api/item-vars/:id
+/**
+ * DELETE /api/item-vars/:id
+ * Delete a product variant.
+ */
 export async function deleteItemVar(req, res) {
   try {
     const { error } = await supabase

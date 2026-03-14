@@ -9,10 +9,17 @@ import {
   deleteItemVar,
 } from '../controllers/itemVars.controller.js';
 
+/**
+ * ItemVars Routes
+ * Defines endpoints for product variant management.
+ */
+
 const router = Router();
 
+// GET /api/item-vars - Fetch all variants
 router.get('/', getItemVars);
 
+// GET /api/item-vars/:id - Fetch variant details
 router.get(
   '/:id',
   [param('id').isInt({ min: 1 }).toInt()],
@@ -20,6 +27,7 @@ router.get(
   getItemVarById
 );
 
+// POST /api/item-vars - Create variant
 router.post(
   '/',
   [
@@ -31,6 +39,7 @@ router.post(
   createItemVar
 );
 
+// PATCH /api/item-vars/:id - Update variant
 router.patch(
   '/:id',
   [
@@ -43,6 +52,7 @@ router.patch(
   updateItemVar
 );
 
+// DELETE /api/item-vars/:id - Remove variant
 router.delete(
   '/:id',
   [param('id').isInt({ min: 1 }).toInt()],

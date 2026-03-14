@@ -1,7 +1,15 @@
 import { supabase } from '../config/supabase.js';
-import { ok, created, noContent, notFound, serverError, badRequest } from '../middleware/response.js';
+import { ok, created, noContent, badRequest, notFound, serverError } from '../middleware/response.js';
 
-// GET /api/item-types
+/**
+ * ItemTypes Controller
+ * Manages product categories (e.g., Clothing, Instruments).
+ */
+
+/**
+ * GET /api/item-types
+ * Fetch all available product categories.
+ */
 export async function getItemTypes(req, res) {
   try {
     const { data, error } = await supabase
@@ -16,7 +24,10 @@ export async function getItemTypes(req, res) {
   }
 }
 
-// GET /api/item-types/:id
+/**
+ * GET /api/item-types/:id
+ * Fetch a specific category by ID.
+ */
 export async function getItemTypeById(req, res) {
   try {
     const { data, error } = await supabase
@@ -33,7 +44,10 @@ export async function getItemTypeById(req, res) {
   }
 }
 
-// POST /api/item-types
+/**
+ * POST /api/item-types
+ * Create a new product category.
+ */
 export async function createItemType(req, res) {
   try {
     const { name } = req.body;
@@ -51,7 +65,10 @@ export async function createItemType(req, res) {
   }
 }
 
-// PATCH /api/item-types/:id
+/**
+ * PATCH /api/item-types/:id
+ * Update an existing category name.
+ */
 export async function updateItemType(req, res) {
   try {
     const { name } = req.body;
@@ -72,7 +89,10 @@ export async function updateItemType(req, res) {
   }
 }
 
-// DELETE /api/item-types/:id
+/**
+ * DELETE /api/item-types/:id
+ * Delete a product category.
+ */
 export async function deleteItemType(req, res) {
   try {
     const { error } = await supabase

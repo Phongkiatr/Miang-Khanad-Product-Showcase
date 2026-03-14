@@ -1,10 +1,15 @@
 import { supabase } from '../config/supabase.js';
-import { ok, created, noContent, notFound, serverError, badRequest } from '../middleware/response.js';
+import { ok, created, noContent, badRequest, notFound, serverError } from '../middleware/response.js';
 
-// ─────────────────────────────────────────────────────────────────────────────
-// GET /api/items
-// Query params: category (item_type id), search, page, limit
-// ─────────────────────────────────────────────────────────────────────────────
+/**
+ * Items Controller
+ * Manages core product data, including fetching with category and variant details.
+ */
+
+/**
+ * GET /api/items
+ * Fetch products with optional filtering by category, search term, and pagination.
+ */
 export async function getItems(req, res) {
   try {
     const { category, search, page = 1, limit = 20 } = req.query;
@@ -43,9 +48,10 @@ export async function getItems(req, res) {
   }
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
-// GET /api/items/:id
-// ─────────────────────────────────────────────────────────────────────────────
+/**
+ * GET /api/items/:id
+ * Fetch detailed information for a single product by ID.
+ */
 export async function getItemById(req, res) {
   try {
     const { id } = req.params;
@@ -69,9 +75,10 @@ export async function getItemById(req, res) {
   }
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
-// POST /api/items
-// ─────────────────────────────────────────────────────────────────────────────
+/**
+ * POST /api/items
+ * Create a new product entry (Admin Only).
+ */
 export async function createItem(req, res) {
   try {
     const { name, description, price, item_type, imgsrc, item_var } = req.body;
@@ -94,15 +101,16 @@ export async function createItem(req, res) {
   }
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
-// PATCH /api/items/:id
-// ─────────────────────────────────────────────────────────────────────────────
+/**
+ * PATCH /api/items/:id
+ * Update an existing product's information (Admin Only).
+ */
 export async function updateItem(req, res) {
   try {
     const { id } = req.params;
     const { name, description, price, item_type, imgsrc, item_var } = req.body;
 
-    // Build only the fields that were actually sent
+    // Filter provided fields for update
     const updates = {};
     if (name        !== undefined) updates.name        = name;
     if (description !== undefined) updates.description = description;
@@ -134,9 +142,10 @@ export async function updateItem(req, res) {
   }
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
-// DELETE /api/items/:id
-// ─────────────────────────────────────────────────────────────────────────────
+/**
+ * DELETE /api/items/:id
+ * Permanently remove a product from the database (Admin Only).
+ */
 export async function deleteItem(req, res) {
   try {
     const { id } = req.params;

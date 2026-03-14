@@ -4,15 +4,20 @@ const LineIcon = () => (
   </svg>
 );
 
+/**
+ * Footer Component
+ * ส่วนท้ายของเว็บไซต์ แสดงข้อมูลแบรนด์ ลิงก์สินค้า และช่องทางการติดต่อ
+ */
+
 export default function Footer() {
   return (
     <footer className="bg-charcoal text-white px-6 pt-16 pb-10 mt-30">
       <div className="max-w-6xl mx-auto">
 
-        {/* Top grid */}
+        {/* ตารางข้อมูลหลัก (Top Grid) */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-12 mb-16">
 
-          {/* Brand */}
+          {/* ข้อมูลแบรนด์และปรัชญา (Brand Identity) */}
           <div>
             <div className="mb-4">
               <div className="text-2xl font-bold tracking-wide mb-1">เมียงขนาด</div>
@@ -24,7 +29,7 @@ export default function Footer() {
             </p>
           </div>
 
-          {/* Products */}
+          {/* รายการหมวดหมู่สินค้าหลัก (Quick Links) */}
           <div>
             <h4 className="text-[12px] tracking-[0.25em] uppercase text-gold font-normal mb-5">สินค้า</h4>
             <ul className="flex flex-col gap-3">
@@ -39,7 +44,7 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Contact */}
+          {/* ข้อมูลการติดต่อและที่อยู่ (Contact Info) */}
           <div>
             <h4 className="text-[12px] tracking-[0.25em] uppercase text-gold font-normal mb-5">ติดต่อ</h4>
             <div className="flex flex-col gap-3">
@@ -58,7 +63,7 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* Bottom bar */}
+        {/* แถบล่างสุด: ลิขสิทธิ์และสโลแกน (Bottom Bar) */}
         <div className="border-t border-white/10 pt-8 flex flex-wrap justify-between items-center gap-4">
           <p className="text-[13px] font-light text-white/35">
             © 2025 เมียงขนาด. สงวนลิขสิทธิ์

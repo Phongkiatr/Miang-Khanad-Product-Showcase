@@ -13,29 +13,40 @@ const LineIcon = () => (
   </svg>
 );
 
+/**
+ * ProductDetailPage Component
+ * หน้าแสดงรายละเอียดสินค้าเชิงลึก พร้อมข้อมูลตัวเลือกสินค้า (Variants), 
+ * ระบบซูมรูปภาพ และปุ่มสั่งซื้อที่เชื่อมโยงกับ LINE OA
+ */
+
 export default function ProductDetailPage() {
   const { productId } = useParams();
   const navigate = useNavigate();
   const numericId = Number(productId);
+  
+  // Hook สำหรับดึงข้อมูลสินค้าชิ้นเดียวจากฐานข้อมูล
   const { item, loading, error } = useProduct(isNaN(numericId) ? null : numericId);
 
-  // Related products
+  // ดึงรายการผลิตภัณฑ์ที่เกี่ยวข้อง (Related Products) มาแสดงด้านล่าง
   const { items: related } = useProducts({ limit: 4 });
 
+  // State สำหรับจัดการตัวเลือกที่ลูกค้าคลิก (สี/ไซส์) และสถานะการซูมรูปภาพ
   const [selectedColor, setSelectedColor] = useState<string>('');
   const [selectedSize, setSelectedSize]   = useState<string>('');
   const [imgZoomed, setImgZoomed]         = useState(false);
 
-  // Set default color เมื่อ item โหลดเสร็จ
+  // ตั้งค่าค่าเริ่มต้นเมื่อข้อมูลสินค้าโหลดสำเร็จ
   useEffect(() => {
     if (item?.item_var?.color) {
       setSelectedColor(item.item_var.color);
     }
     setSelectedSize('');
     setImgZoomed(false);
+    // เลื่อนหน้ากลับขึ้นไปด้านบนสุด
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, [item]);
 
+  // แสดงสถานะระหว่างรอโหลดข้อมูล (Loading State)
   if (loading) return (
     <div className="pt-40 min-h-screen">
       <div className="max-w-6xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 gap-16 animate-pulse">
@@ -49,6 +60,7 @@ export default function ProductDetailPage() {
     </div>
   );
 
+  // แสดงกรณีไม่พบข้อมูลสินค้าหรือเกิดข้อผิดพลาด
   if (error || !item) return (
     <div className="pt-40 text-center text-muted min-h-[60vh] flex flex-col items-center justify-center gap-4">
       <p className="text-5xl">✦</p>
@@ -59,17 +71,18 @@ export default function ProductDetailPage() {
     </div>
   );
 
-  // ─── Derive display values ────────────────────────────────────────────────
+  // ─── การประมวลผลข้อมูลแสดงผล (Derive values) ─────────────────────────
 
   const categoryLabel = item.item_type?.name ?? 'สินค้า';
   const variant       = item.item_var;
 
-  // ssize = shirt size (S/M/L/XL), tsize = ไซส์อื่น
+  // ตรวจสอบข้อมูลไซส์ (ssize = ไซส์เสื้อ, tsize = ไซส์ทั่วไปอื่นๆ)
   const hasSSize  = !!variant?.ssize;
   const hasTSize  = !!variant?.tsize;
   const hasSize   = hasSSize || hasTSize;
   const sizeLabel = hasSSize ? variant!.ssize! : hasTSize ? variant!.tsize! : null;
 
+  // สร้างข้อความอัตโนมัติสำหรับส่งเข้า LINE เพื่อความสะดวกของลูกค้า
   const lineMsg = buildLineMessage(
     item.name,
     selectedColor || variant?.color || undefined,
@@ -77,25 +90,25 @@ export default function ProductDetailPage() {
   );
   const lineUrl = buildLineUrl(lineMsg);
 
-  // ─── Handle Line CTA click ────────────────────────────────────────────────
+  // ─── จัดการการคลิกสั่งซื้อ (Line CTA Click) ──────────────────────────
 
   const handleLineClick = async (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
-    // 1. Log inquiry ก่อนเปิด Line
+    // 1. บันทึกประวัติการสอบถาม (Inquiry Log) ลงในระบบแอดมินก่อน
     try {
       await logInquiry(item.id);
     } catch {
-      // ถ้า log ไม่สำเร็จ ยังคงเปิด Line ให้ลูกค้าได้
+      // หากบันทึกไม่สำเร็จยังคงให้ลูกค้าเปิด LINE ได้ตามปกติ
       console.warn('Failed to log inquiry');
     }
-    // 2. เปิด Line OA
+    // 2. เปิดหน้าแชท LINE OA พร้อมจัดเตรียมข้อความเริ่มต้นให้ลูกค้า
     window.open(lineUrl, '_blank', 'noopener,noreferrer');
   };
 
   return (
     <div className="pt-[90px]">
 
-      {/* Breadcrumb */}
+      {/* บอกตำแหน่งหน้าปัจจุบัน (Breadcrumb) */}
       <div className="max-w-6xl mx-auto px-6 py-6 flex items-center gap-2 text-[13px] font-light text-muted
                        animate-fade-in opacity-0">
         {[
@@ -120,10 +133,10 @@ export default function ProductDetailPage() {
         ))}
       </div>
 
-      {/* Main 2-col */}
+      {/* เนื้อหาหลัก: ข้อมูลและรูปภาพสินค้า */}
       <div className="max-w-6xl mx-auto px-6 pb-28 grid grid-cols-1 md:grid-cols-2 gap-16 lg:gap-20 items-start">
 
-        {/* ── Image ── */}
+        {/* ── ส่วนแสดงรูปภาพสินค้า (Image) ── */}
         <div className="animate-fade-in opacity-0 delay-100">
           <div
             className="relative overflow-hidden bg-cream-dark mb-3 cursor-zoom-in"
@@ -136,26 +149,28 @@ export default function ProductDetailPage() {
               className={`w-full h-full object-cover transition-transform duration-500
                            ${imgZoomed ? 'scale-110' : 'scale-100'}`}
             />
+            {/* แสดงป้ายหมวดหมู่บนรูปภาพ */}
             <span className="absolute top-5 left-5 bg-cream/90 backdrop-blur-sm
-                              px-3 py-1 text-[10px] tracking-[0.15em] text-charcoal">
+                               px-3 py-1 text-[10px] tracking-[0.15em] text-charcoal">
               {categoryLabel}
             </span>
           </div>
         </div>
 
-        {/* ── Info ── */}
+        {/* ── ส่วนข้อมูลการสั่งซื้อ (Order Info) ── */}
         <div className="md:sticky md:top-28 animate-slide-up opacity-0 delay-200">
           <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-charcoal leading-tight mb-2">
             {item.name}
           </h1>
 
-          {/* item_type badge */}
+          {/* ประเภทสินค้า */}
           {item.item_type && (
             <p className="text-[13px] font-light text-muted mb-6 tracking-wide">
               {item.item_type.name}
             </p>
           )}
 
+          {/* การแสดงผลราคา */}
           <div className="text-3xl font-bold text-vermillion mb-8">
             {formatPrice(item.price)}
             <span className="text-sm font-light text-muted ml-2">/ ชิ้น</span>
@@ -163,14 +178,13 @@ export default function ProductDetailPage() {
 
           <div className="h-px bg-black/10 mb-8" />
 
-          {/* Color */}
+          {/* การเลือกสี (Color Selection) */}
           {variant?.color && (
             <div className="mb-7">
               <div className="flex justify-between mb-3.5">
                 <span className="text-[13px] font-semibold tracking-[0.1em] uppercase text-charcoal">สี</span>
                 <span className="text-[13px] font-light text-muted">{selectedColor || variant.color}</span>
               </div>
-              {/* สีที่มีจาก variant เดียว — ในอนาคตถ้าแก้ Schema ให้ variants เป็น array จะรองรับหลายสีได้ */}
               <button
                 onClick={() => setSelectedColor(variant.color!)}
                 className={`w-9 h-9 rounded-full border-none cursor-pointer transition-all duration-200
@@ -183,7 +197,7 @@ export default function ProductDetailPage() {
             </div>
           )}
 
-          {/* Size */}
+          {/* การเลือกขนาด (Size Selection) */}
           {hasSize && sizeLabel && (
             <div className="mb-7">
               <div className="flex justify-between mb-3.5">
@@ -205,8 +219,7 @@ export default function ProductDetailPage() {
 
           <div className="h-px bg-black/10 mb-8" />
 
-          {/* ── Line CTA ── */}
-          {/* onClick: log inquiry → เปิด Line พร้อมข้อความอัตโนมัติ */}
+          {/* ── ปุ่มดำเนินการหลัก (Line CTA) ── */}
           <a
             href={lineUrl}
             onClick={handleLineClick}
@@ -221,17 +234,17 @@ export default function ProductDetailPage() {
           </a>
 
           <p className="text-[12px] text-muted text-center font-light tracking-wide">
-            จะส่งข้อความ: "{lineMsg}"
+            จะส่งข้อความอัตโนมัติ: "{lineMsg}"
           </p>
 
           <div className="h-px bg-black/10 my-8" />
 
-          {/* Detail */}
+          {/* รายละเอียดสินค้าเชิงลึก */}
           <div className="flex flex-col gap-6">
             {item.description && (
               <div>
                 <h3 className="text-[12px] font-semibold tracking-[0.2em] uppercase text-charcoal mb-3">
-                  รายละเอียด
+                  รายละเอียดสินค้า
                 </h3>
                 <p className="text-sm font-light text-charcoal-light leading-[1.9]">
                   {item.description}
@@ -241,14 +254,14 @@ export default function ProductDetailPage() {
 
             <div>
               <h3 className="text-[12px] font-semibold tracking-[0.2em] uppercase text-charcoal mb-3">
-                ข้อมูลสินค้า
+                ข้อมูลเพิ่มเติม
               </h3>
               <dl className="flex flex-col gap-2">
                 {[
                   { label: 'หมวดหมู่', value: categoryLabel },
-                  ...(variant?.color ? [{ label: 'สี', value: variant.color }] : []),
+                  ...(variant?.color ? [{ label: 'สีเดิม', value: variant.color }] : []),
                   ...(variant?.ssize ? [{ label: 'ไซส์เสื้อ', value: variant.ssize }] : []),
-                  ...(variant?.tsize ? [{ label: 'ไซส์', value: variant.tsize }] : []),
+                  ...(variant?.tsize ? [{ label: 'ไซส์ทั่วไป', value: variant.tsize }] : []),
                 ].map(({ label, value }) => (
                   <div key={label} className="flex gap-4 text-sm font-light">
                     <dt className="text-muted shrink-0 w-24">{label}</dt>
@@ -261,7 +274,7 @@ export default function ProductDetailPage() {
         </div>
       </div>
 
-      {/* Related */}
+      {/* ส่วนสินค้าแนะนำอื่นๆ (Related Products) */}
       <div className="bg-cream-dark py-20 px-6">
         <div className="max-w-6xl mx-auto">
           <h2 className="text-2xl font-bold text-charcoal mb-12">สินค้าอื่นที่อาจสนใจ</h2>
