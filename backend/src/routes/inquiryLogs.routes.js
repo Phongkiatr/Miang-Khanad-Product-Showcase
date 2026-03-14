@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { body, param, query } from 'express-validator';
 import { validate } from '../middleware/validate.js';
+import { auth } from '../middleware/auth.js';
 import {
   getInquiryLogs,
   getInquiryLogById,
@@ -18,11 +19,12 @@ const router = Router();
 
 // GET /api/inquiry-logs/stats - Fetch summary statistics
 // (Must be defined before /:id to avoid conflict)
-router.get('/stats', getInquiryStats);
+router.get('/stats', auth, getInquiryStats);
 
 // GET /api/inquiry-logs - Fetch logs with pagination/filtering
 router.get(
   '/',
+  auth,
   [
     query('page').optional().isInt({ min: 1 }).toInt(),
     query('limit').optional().isInt({ min: 1, max: 200 }).toInt(),
@@ -35,6 +37,7 @@ router.get(
 // GET /api/inquiry-logs/:id - Fetch log details
 router.get(
   '/:id',
+  auth,
   [param('id').isInt({ min: 1 }).toInt()],
   validate,
   getInquiryLogById
@@ -51,6 +54,7 @@ router.post(
 // DELETE /api/inquiry-logs/:id - Remove log entry
 router.delete(
   '/:id',
+  auth,
   [param('id').isInt({ min: 1 }).toInt()],
   validate,
   deleteInquiryLog

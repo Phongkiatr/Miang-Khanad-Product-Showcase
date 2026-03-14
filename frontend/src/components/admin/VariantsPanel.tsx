@@ -77,14 +77,14 @@ function SimpleListPanel<T extends { id: number; name?: string; color?: string; 
 
 // ─── Item Types ───────────────────────────────────────────────────────────────
 function ItemTypesSection() {
-  const [types, setTypes]         = useState<any[]>([]);
-  const [loading, setLoading]     = useState(true);
+  const [types, setTypes] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
-  const [editing, setEditing]     = useState<number | null>(null);
-  const [name, setName]           = useState('');
-  const [saving, setSaving]       = useState(false);
+  const [editing, setEditing] = useState<number | null>(null);
+  const [name, setName] = useState('');
+  const [saving, setSaving] = useState(false);
   const [confirmId, setConfirmId] = useState<number | null>(null);
-  const [toast, setToast]         = useState<{ msg: string; type: 'success' | 'error' } | null>(null);
+  const [toast, setToast] = useState<{ msg: string; type: 'success' | 'error' } | null>(null);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -182,14 +182,14 @@ function ItemTypesSection() {
 const EMPTY_VAR = { color: '', ssize: '', tsize: '' };
 
 function ItemVarsSection() {
-  const [vars, setVars]           = useState<any[]>([]);
-  const [loading, setLoading]     = useState(true);
+  const [vars, setVars] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
-  const [editing, setEditing]     = useState<number | null>(null);
-  const [form, setForm]           = useState(EMPTY_VAR);
-  const [saving, setSaving]       = useState(false);
+  const [editing, setEditing] = useState<number | null>(null);
+  const [form, setForm] = useState(EMPTY_VAR);
+  const [saving, setSaving] = useState(false);
   const [confirmId, setConfirmId] = useState<number | null>(null);
-  const [toast, setToast]         = useState<{ msg: string; type: 'success' | 'error' } | null>(null);
+  const [toast, setToast] = useState<{ msg: string; type: 'success' | 'error' } | null>(null);
 
   const load = useCallback(async () => {
     setLoading(true);

@@ -1,10 +1,18 @@
 const BASE = import.meta.env.VITE_API_URL ?? 'http://localhost:3001';
 
 async function request<T>(path: string, options?: RequestInit): Promise<T> {
+  const token = sessionStorage.getItem('mk_admin_token');
+  const headers: Record<string, string> = { 'Content-Type': 'application/json' };
+  
+  if (token) {
+    headers['Authorization'] = `Bearer ${token}`;
+  }
+
   const res = await fetch(`${BASE}${path}`, {
-    headers: { 'Content-Type': 'application/json' },
+    headers,
     ...options,
   });
+  
   const json = await res.json();
   if (!res.ok) throw new Error(json.message ?? 'Request failed');
   return json;
@@ -35,5 +43,8 @@ export const api = {
     list:  (q = '') => request<any>(`/api/inquiry-logs?limit=100${q}`),
     stats: () => request<any>('/api/inquiry-logs/stats'),
     delete: (id: number) => request<any>(`/api/inquiry-logs/${id}`, { method: 'DELETE' }),
+  },
+  auth: {
+    login: (password: string) => request<any>('/api/auth/login', { method: 'POST', body: JSON.stringify({ password }) }),
   },
 };

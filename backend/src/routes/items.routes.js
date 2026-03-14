@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { body, param, query } from 'express-validator';
 import { validate } from '../middleware/validate.js';
+import { auth } from '../middleware/auth.js';
 import {
   getItems,
   getItemById,
@@ -48,6 +49,7 @@ router.post(
     body('item_var').optional().isInt({ min: 1 }).toInt(),
     body('imgsrc').optional().isURL().withMessage('imgsrc must be a valid URL'),
   ],
+  auth,
   validate,
   createItem
 );
@@ -64,6 +66,7 @@ router.patch(
     body('item_var').optional().isInt({ min: 1 }).toInt(),
     body('imgsrc').optional().isURL(),
   ],
+  auth,
   validate,
   updateItem
 );
@@ -71,6 +74,7 @@ router.patch(
 // DELETE /api/items/:id - Remove a product (Admin)
 router.delete(
   '/:id',
+  auth,
   [param('id').isInt({ min: 1 }).toInt()],
   validate,
   deleteItem

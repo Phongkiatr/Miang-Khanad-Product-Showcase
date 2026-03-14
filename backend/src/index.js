@@ -8,6 +8,7 @@ import itemsRouter        from './routes/items.routes.js';
 import itemTypesRouter    from './routes/itemTypes.routes.js';
 import itemVarsRouter     from './routes/itemVars.routes.js';
 import inquiryLogsRouter  from './routes/inquiryLogs.routes.js';
+import authRouter         from './routes/auth.routes.js';
 // Error and Middleware imports
 import { errorHandler, notFoundHandler } from './middleware/response.js';
 
@@ -41,6 +42,7 @@ app.use('/api/items',         itemsRouter);
 app.use('/api/item-types',    itemTypesRouter);
 app.use('/api/item-vars',     itemVarsRouter);
 app.use('/api/inquiry-logs',  inquiryLogsRouter);
+app.use('/api/auth',          authRouter);
 
 // ─── Error handlers (must be last) ───────────────────────────────────────────
 

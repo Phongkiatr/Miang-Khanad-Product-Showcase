@@ -4,11 +4,10 @@ import ItemsPanel from '../components/admin/ItemsPanel';
 import VariantsPanel from '../components/admin/VariantsPanel';
 import InquiryLogsPanel from '../components/admin/InquiryLogsPanel';
 import DatabaseBrowserPanel from '../components/admin/DatabaseBrowserPanel';
+import { api } from '../lib/api';
 
 // ─── Config ───────────────────────────────────────────────────────────────────
-// เปลี่ยนรหัสผ่านได้ที่นี่ หรือย้ายไปไว้ใน .env เป็น VITE_ADMIN_PASSWORD
-const ADMIN_PASSWORD = import.meta.env.VITE_ADMIN_PASSWORD ?? 'miang2025';
-const SESSION_KEY    = 'mk_admin_auth';
+const SESSION_KEY = 'mk_admin_token';
 
 type Tab = 'items' | 'variants' | 'logs' | 'database';
 
@@ -25,12 +24,13 @@ function PasswordGate({ onUnlock }: { onUnlock: () => void }) {
   const [error, setError]   = useState(false);
   const [shaking, setShake] = useState(false);
 
-  const submit = (e: React.FormEvent) => {
+  const submit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (value === ADMIN_PASSWORD) {
-      sessionStorage.setItem(SESSION_KEY, '1');
+    try {
+      const res = await api.auth.login(value);
+      sessionStorage.setItem(SESSION_KEY, res.data.token);
       onUnlock();
-    } else {
+    } catch {
       setError(true);
       setShake(true);
       setValue('');
@@ -212,7 +212,7 @@ function AdminLayout() {
 // ─── Page: check session → gate or dashboard ──────────────────────────────────
 export default function AdminPage() {
   const [unlocked, setUnlocked] = useState(
-    () => sessionStorage.getItem(SESSION_KEY) === '1'
+    () => !!sessionStorage.getItem(SESSION_KEY)
   );
 
   if (!unlocked) return <PasswordGate onUnlock={() => setUnlocked(true)} />;

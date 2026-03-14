@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { body, param } from 'express-validator';
 import { validate } from '../middleware/validate.js';
+import { auth } from '../middleware/auth.js';
 import {
   getItemTypes,
   getItemTypeById,
@@ -30,6 +31,7 @@ router.get(
 // POST /api/item-types - Create category
 router.post(
   '/',
+  auth,
   [body('name').notEmpty().withMessage('name is required').trim()],
   validate,
   createItemType
@@ -38,6 +40,7 @@ router.post(
 // PATCH /api/item-types/:id - Update category
 router.patch(
   '/:id',
+  auth,
   [
     param('id').isInt({ min: 1 }).toInt(),
     body('name').notEmpty().withMessage('name is required').trim(),
@@ -49,6 +52,7 @@ router.patch(
 // DELETE /api/item-types/:id - Remove category
 router.delete(
   '/:id',
+  auth,
   [param('id').isInt({ min: 1 }).toInt()],
   validate,
   deleteItemType

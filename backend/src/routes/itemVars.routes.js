@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { body, param } from 'express-validator';
 import { validate } from '../middleware/validate.js';
+import { auth } from '../middleware/auth.js';
 import {
   getItemVars,
   getItemVarById,
@@ -30,6 +31,7 @@ router.get(
 // POST /api/item-vars - Create variant
 router.post(
   '/',
+  auth,
   [
     body('color').optional().isString().trim(),
     body('ssize').optional().isString().trim(),
@@ -42,6 +44,7 @@ router.post(
 // PATCH /api/item-vars/:id - Update variant
 router.patch(
   '/:id',
+  auth,
   [
     param('id').isInt({ min: 1 }).toInt(),
     body('color').optional().isString().trim(),
@@ -55,6 +58,7 @@ router.patch(
 // DELETE /api/item-vars/:id - Remove variant
 router.delete(
   '/:id',
+  auth,
   [param('id').isInt({ min: 1 }).toInt()],
   validate,
   deleteItemVar

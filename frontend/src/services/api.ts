@@ -55,8 +55,15 @@ const BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
  * Custom fetch wrapper with error handling and default headers
  */
 async function apiFetch<T>(path: string, options?: RequestInit): Promise<T> {
+  const token = sessionStorage.getItem('mk_admin_token');
+  const headers: Record<string, string> = { 'Content-Type': 'application/json' };
+  
+  if (token) {
+    headers['Authorization'] = `Bearer ${token}`;
+  }
+
   const res = await fetch(`${BASE_URL}${path}`, {
-    headers: { 'Content-Type': 'application/json' },
+    headers,
     ...options,
   });
 
@@ -134,4 +141,14 @@ export async function fetchTableData(tableName: string, page: number = 1, limit:
   const endpoint = tableName.startsWith('/') ? tableName : `/api/${tableName}`;
   
   return apiFetch<ApiListResponse<any>>(`${endpoint}?${qs}`);
+}
+
+/**
+ * Authentication
+ */
+export async function login(password: string) {
+  return apiFetch<ApiSingleResponse<{ token: string }>>('/api/auth/login', {
+    method: 'POST',
+    body: JSON.stringify({ password }),
+  });
 }
