@@ -31,8 +31,10 @@ export const SettingsProvider: React.FC<{ children: React.ReactNode }> = ({ chil
 
   const refresh = useCallback(async () => {
     try {
-      const data = await api.settings.get();
-      setSettings(prev => ({ ...prev, ...data }));
+      const res = await api.settings.get();
+      if (res.success && res.data) {
+        setSettings(prev => ({ ...prev, ...res.data }));
+      }
     } catch (err) {
       console.error('Failed to fetch settings:', err);
     } finally {
@@ -46,8 +48,10 @@ export const SettingsProvider: React.FC<{ children: React.ReactNode }> = ({ chil
 
   const update = async (newSettings: Partial<Settings>) => {
     try {
-      const data = await api.settings.update(newSettings);
-      setSettings(prev => ({ ...prev, ...data }));
+      const res = await api.settings.update(newSettings);
+      if (res.success && res.data) {
+        setSettings(prev => ({ ...prev, ...res.data }));
+      }
     } catch (err) {
       console.error('Failed to update settings:', err);
       throw err;

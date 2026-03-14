@@ -6,6 +6,27 @@ const LineIcon = () => (
   </svg>
 );
 
+const FacebookIcon = () => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+    <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.469h3.047V9.43c0-3.007 1.791-4.667 4.53-4.667 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.248h3.328l-.532 3.469h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
+  </svg>
+);
+
+const InstagramIcon = () => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+    <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+  </svg>
+);
+
+const MapPinIcon = () => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+    <circle cx="12" cy="10" r="3"></circle>
+  </svg>
+);
+
 /**
  * Footer Component
  * ส่วนท้ายของเว็บไซต์ แสดงข้อมูลแบรนด์ ลิงก์สินค้า และช่องทางการติดต่อ
@@ -64,14 +85,33 @@ export default function Footer() {
                 Line OA: {settings.line_id}
               </a>
               {settings.facebook && (
-                <a href={settings.facebook} target="_blank" rel="noopener noreferrer" 
-                   className="text-sm font-light text-white/60 hover:text-white transition-colors">Facebook</a>
+                <a
+                  href={settings.facebook}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2.5 text-sm font-light text-white/60
+                             no-underline transition-colors duration-200 hover:text-white"
+                >
+                  <FacebookIcon />
+                  Facebook
+                </a>
               )}
               {settings.instagram && (
-                <a href={settings.instagram} target="_blank" rel="noopener noreferrer" 
-                   className="text-sm font-light text-white/60 hover:text-white transition-colors">Instagram</a>
+                <a
+                  href={settings.instagram}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2.5 text-sm font-light text-white/60
+                             no-underline transition-colors duration-200 hover:text-white"
+                >
+                  <InstagramIcon />
+                  Instagram
+                </a>
               )}
-              <span className="text-sm font-light text-white/60">📍 {settings.location}</span>
+              <div className="flex items-center gap-2.5 text-sm font-light text-white/60">
+                <MapPinIcon />
+                <span>{settings.location}</span>
+              </div>
             </div>
           </div>
         </div>

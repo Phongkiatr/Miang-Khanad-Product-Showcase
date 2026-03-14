@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useSettings } from '../../context/SettingsContext';
 import { Spinner } from './AdminUI';
 
@@ -7,6 +7,13 @@ export default function SettingsPanel() {
   const [saving, setSaving] = useState(false);
   const [form, setForm] = useState(settings);
   const [toast, setToast] = useState<{ msg: string; type: 'success' | 'error' } | null>(null);
+
+  // Sync form with settings once loaded
+  useEffect(() => {
+    if (!loading) {
+      setForm(settings);
+    }
+  }, [loading, settings]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
