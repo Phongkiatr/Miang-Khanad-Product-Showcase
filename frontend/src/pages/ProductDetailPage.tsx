@@ -35,14 +35,40 @@ export default function ProductDetailPage() {
   const [selectedSize, setSelectedSize]   = useState<string>('');
   const [imgZoomed, setImgZoomed]         = useState(false);
 
+  // ─── การประมวลผลข้อมูลแสดงผล (Derive values) ─────────────────────────
+  const variants = Array.isArray(item?.item_var) ? item.item_var : (item?.item_var ? [item.item_var] : []);
+  const categoryLabel = item?.item_type?.name ?? 'สินค้า';
+
+  // สกัดข้อมูลพื้นฐาน (ทั้งหมด)
+  const allUniqueColors = Array.from(new Set(variants.map(v => v.color).filter(Boolean)));
+  const allUniqueSizes  = Array.from(new Set(variants.map(v => v.ssize || v.tsize).filter(Boolean)));
+  const shirtSizes      = Array.from(new Set(variants.map(v => v.ssize).filter(Boolean)));
+  const instrumentSizes = Array.from(new Set(variants.map(v => v.tsize).filter(Boolean)));
+  const hasSize         = allUniqueSizes.length > 0;
+
+  // กรองสีและไซส์ตามการเลือก (Dependent Logic)
+  const availableVariants = selectedColor 
+    ? variants.filter(v => v.color === selectedColor)
+    : variants;
+
+  const currentAvailableSizes = Array.from(new Set(
+    availableVariants.map(v => v.ssize || v.tsize).filter(Boolean)
+  ));
+
+  // ตรวจสอบความถูกต้องของไซส์ที่เลือกเมื่อเปลี่ยนสี
+  useEffect(() => {
+    if (selectedSize && !currentAvailableSizes.includes(selectedSize)) {
+      setSelectedSize('');
+    }
+  }, [selectedColor, currentAvailableSizes, selectedSize]);
+
   // ตั้งค่าค่าเริ่มต้นเมื่อข้อมูลสินค้าโหลดสำเร็จ
   useEffect(() => {
-    if (item?.item_var?.color) {
-      setSelectedColor(item.item_var.color);
+    if (variants.length > 0 && variants[0].color) {
+      setSelectedColor(variants[0].color);
     }
     setSelectedSize('');
     setImgZoomed(false);
-    // เลื่อนหน้ากลับขึ้นไปด้านบนสุด
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, [item]);
 
@@ -71,22 +97,12 @@ export default function ProductDetailPage() {
     </div>
   );
 
-  // ─── การประมวลผลข้อมูลแสดงผล (Derive values) ─────────────────────────
-
-  const categoryLabel = item.item_type?.name ?? 'สินค้า';
-  const variant       = item.item_var;
-
-  // ตรวจสอบข้อมูลไซส์ (ssize = ไซส์เสื้อ, tsize = ไซส์ทั่วไปอื่นๆ)
-  const hasSSize  = !!variant?.ssize;
-  const hasTSize  = !!variant?.tsize;
-  const hasSize   = hasSSize || hasTSize;
-  const sizeLabel = hasSSize ? variant!.ssize! : hasTSize ? variant!.tsize! : null;
 
   // สร้างข้อความอัตโนมัติสำหรับส่งเข้า LINE เพื่อความสะดวกของลูกค้า
   const lineMsg = buildLineMessage(
     item.name,
-    selectedColor || variant?.color || undefined,
-    selectedSize || sizeLabel || undefined
+    selectedColor || undefined,
+    selectedSize || undefined
   );
   const lineUrl = buildLineUrl(lineMsg);
 
@@ -94,6 +110,15 @@ export default function ProductDetailPage() {
 
   const handleLineClick = async (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
+    if (allUniqueColors.length > 0 && !selectedColor) {
+      alert('กรุณาเลือกสีก่อนสั่งซื้อ');
+      return;
+    }
+    if (hasSize && !selectedSize) {
+      alert('กรุณาเลือกไซส์ก่อนสั่งซื้อ');
+      return;
+    }
+
     // 1. บันทึกประวัติการสอบถาม (Inquiry Log) ลงในระบบแอดมินก่อน
     try {
       await logInquiry(item.id);
@@ -179,41 +204,51 @@ export default function ProductDetailPage() {
           <div className="h-px bg-black/10 mb-8" />
 
           {/* การเลือกสี (Color Selection) */}
-          {variant?.color && (
+          {allUniqueColors.length > 0 && (
             <div className="mb-7">
               <div className="flex justify-between mb-3.5">
-                <span className="text-[13px] font-semibold tracking-[0.1em] uppercase text-charcoal">สี</span>
-                <span className="text-[13px] font-light text-muted">{selectedColor || variant.color}</span>
+                <span className="text-[13px] font-semibold tracking-[0.1em] uppercase text-charcoal">เลือกสี</span>
+                <span className="text-[13px] font-light text-muted">{selectedColor || 'กรุณาเลือก'}</span>
               </div>
-              <button
-                onClick={() => setSelectedColor(variant.color!)}
-                className={`w-9 h-9 rounded-full border-none cursor-pointer transition-all duration-200
-                             ${selectedColor === variant.color
-                               ? 'outline outline-2 outline-charcoal outline-offset-2 scale-110'
-                               : 'hover:scale-105'}`}
-                style={{ background: '#8A8278' }}
-                title={variant.color}
-              />
+              <div className="flex flex-wrap gap-3">
+                {allUniqueColors.map((color: any) => (
+                  <button
+                    key={color}
+                    onClick={() => setSelectedColor(color)}
+                    className={`w-9 h-9 rounded-full border-none cursor-pointer transition-all duration-200
+                                 ${selectedColor === color
+                                   ? 'outline outline-2 outline-charcoal outline-offset-2 scale-110'
+                                   : 'hover:scale-105'}`}
+                    style={{ background: '#8A8278' }} // Note: in a real app, color might be a hex code or we map it
+                    title={color}
+                  />
+                ))}
+              </div>
             </div>
           )}
 
           {/* การเลือกขนาด (Size Selection) */}
-          {hasSize && sizeLabel && (
+          {hasSize && (
             <div className="mb-7">
               <div className="flex justify-between mb-3.5">
-                <span className="text-[13px] font-semibold tracking-[0.1em] uppercase text-charcoal">ไซส์</span>
-                <span className="text-[13px] font-semibold text-charcoal">{selectedSize || sizeLabel}</span>
+                <span className="text-[13px] font-semibold tracking-[0.1em] uppercase text-charcoal">เลือกไซส์</span>
+                <span className="text-[13px] font-semibold text-charcoal">{selectedSize || 'กรุณาเลือก'}</span>
               </div>
-              <button
-                onClick={() => setSelectedSize(sizeLabel)}
-                className={`px-5 py-3 text-sm font-semibold border transition-all duration-150
-                             cursor-pointer
-                             ${selectedSize === sizeLabel
-                               ? 'bg-charcoal text-white border-charcoal'
-                               : 'bg-transparent text-charcoal border-black/15 hover:border-charcoal'}`}
-              >
-                {sizeLabel}
-              </button>
+              <div className="flex flex-wrap gap-2">
+                {currentAvailableSizes.map((size: any) => (
+                  <button
+                    key={size}
+                    onClick={() => setSelectedSize(size)}
+                    className={`px-5 py-3 text-sm font-semibold border transition-all duration-150
+                                 cursor-pointer
+                                 ${selectedSize === size
+                                   ? 'bg-charcoal text-white border-charcoal'
+                                   : 'bg-transparent text-charcoal border-black/15 hover:border-charcoal'}`}
+                  >
+                    {size}
+                  </button>
+                ))}
+              </div>
             </div>
           )}
 
@@ -259,9 +294,9 @@ export default function ProductDetailPage() {
               <dl className="flex flex-col gap-2">
                 {[
                   { label: 'หมวดหมู่', value: categoryLabel },
-                  ...(variant?.color ? [{ label: 'สีเดิม', value: variant.color }] : []),
-                  ...(variant?.ssize ? [{ label: 'ไซส์เสื้อ', value: variant.ssize }] : []),
-                  ...(variant?.tsize ? [{ label: 'ไซส์ทั่วไป', value: variant.tsize }] : []),
+                  ...(allUniqueColors.length > 0 ? [{ label: 'สีที่มี', value: allUniqueColors.join(', ') }] : []),
+                  ...(shirtSizes.length > 0 ? [{ label: 'ไซส์เสื้อที่มี', value: shirtSizes.join(', ') }] : []),
+                  ...(instrumentSizes.length > 0 ? [{ label: 'ไซส์เครื่องดนตรีที่มี', value: instrumentSizes.join(', ') }] : []),
                 ].map(({ label, value }) => (
                   <div key={label} className="flex gap-4 text-sm font-light">
                     <dt className="text-muted shrink-0 w-24">{label}</dt>

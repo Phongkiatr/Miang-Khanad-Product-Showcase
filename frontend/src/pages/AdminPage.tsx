@@ -13,7 +13,7 @@ type Tab = 'items' | 'variants' | 'logs' | 'database';
 
 const TABS: { key: Tab; label: string; icon: string }[] = [
   { key: 'items',    label: 'สินค้า',              icon: '◈' },
-  { key: 'variants', label: 'หมวดหมู่ & Variants', icon: '◇' },
+  { key: 'variants', label: 'หมวดหมู่สินค้า', icon: '◇' },
   { key: 'logs',     label: 'Inquiry Logs',         icon: '◎' },
   { key: 'database', label: 'Database Browser',    icon: '▤' },
 ];
@@ -168,7 +168,7 @@ function AdminLayout() {
       <div className="flex-1 min-w-0 flex flex-col">
 
         {/* Top bar */}
-        <header className="sticky top-0 z-20 bg-cream border-b border-black/10 px-6 py-4
+        <header className="sticky top-0 z-20 bg-cream border-b border-black/10 px-10 py-4
                             flex items-center justify-between">
           <div className="flex items-center gap-4">
             {/* Hamburger (mobile) */}
@@ -198,7 +198,7 @@ function AdminLayout() {
         </header>
 
         {/* Content */}
-        <main className="flex-1 px-6 py-8 max-w-6xl w-full mx-auto">
+        <main className="flex-1 px-10 py-8 max-w-[1400px] w-full mx-auto">
           {tab === 'items'    && <ItemsPanel />}
           {tab === 'variants' && <VariantsPanel />}
           {tab === 'logs'     && <InquiryLogsPanel />}

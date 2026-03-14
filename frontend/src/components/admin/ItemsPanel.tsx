@@ -3,12 +3,11 @@ import { api } from '../../lib/api';
 import { Modal, Confirm, Field, SubmitBtn, Empty, Spinner, Toast } from './AdminUI';
 import { formatPrice } from '../../data/mockData';
 
-const EMPTY_FORM = { name: '', description: '', price: '', item_type: '', item_var: '', imgsrc: '' };
+const EMPTY_FORM = { name: '', description: '', price: '', item_type: '', imgsrc: '', variants: [] as any[] };
 
 export default function ItemsPanel() {
   const [items, setItems]       = useState<any[]>([]);
   const [types, setTypes]       = useState<any[]>([]);
-  const [vars, setVars]         = useState<any[]>([]);
   const [loading, setLoading]   = useState(true);
   const [search, setSearch]     = useState('');
   const [form, setForm]         = useState(EMPTY_FORM);
@@ -21,14 +20,12 @@ export default function ItemsPanel() {
   const load = useCallback(async () => {
     setLoading(true);
     try {
-      const [itemsRes, typesRes, varsRes] = await Promise.all([
+      const [itemsRes, typesRes] = await Promise.all([
         api.items.list(),
         api.itemTypes.list(),
-        api.itemVars.list(),
       ]);
       setItems(itemsRes.data ?? []);
       setTypes(typesRes.data ?? []);
-      setVars(varsRes.data ?? []);
     } catch {
       setToast({ msg: 'โหลดข้อมูลล้มเหลว', type: 'error' });
     } finally {
@@ -45,8 +42,8 @@ export default function ItemsPanel() {
       description: item.description ?? '',
       price: String(item.price ?? ''),
       item_type: String(item.item_type?.id ?? ''),
-      item_var: String(item.item_var?.id ?? ''),
       imgsrc: item.imgsrc ?? '',
+      variants: Array.isArray(item.item_var) ? item.item_var : (item.item_var ? [item.item_var] : []),
     });
     setEditing(item.id);
     setShowModal(true);
@@ -61,8 +58,8 @@ export default function ItemsPanel() {
         description: form.description || undefined,
         price: parseFloat(form.price),
         item_type: form.item_type ? parseInt(form.item_type) : undefined,
-        item_var: form.item_var ? parseInt(form.item_var) : undefined,
         imgsrc: form.imgsrc || undefined,
+        variants: (form as any).variants,
       };
       if (editing) await api.items.update(editing, body);
       else await api.items.create(body);
@@ -126,7 +123,7 @@ export default function ItemsPanel() {
           <table className="w-full text-sm border-collapse">
             <thead>
               <tr className="border-b border-black/10">
-                {['ID', 'ภาพ', 'ชื่อสินค้า', 'หมวดหมู่', 'ราคา', 'Variant', ''].map((h) => (
+                {['ID', 'ภาพ', 'ชื่อสินค้า', 'หมวดหมู่', 'ราคา', 'ตัวเลือก', ''].map((h) => (
                   <th key={h} className="text-left py-3 px-3 text-[11px] tracking-[0.15em] uppercase
                                          text-muted font-normal whitespace-nowrap">
                     {h}
@@ -148,7 +145,9 @@ export default function ItemsPanel() {
                   <td className="py-3 px-3 text-muted font-light">{item.item_type?.name ?? '—'}</td>
                   <td className="py-3 px-3 text-vermillion font-semibold">{formatPrice(item.price)}</td>
                   <td className="py-3 px-3 text-muted font-light text-xs">
-                    {item.item_var ? `${item.item_var.color ?? ''} ${item.item_var.ssize ?? item.item_var.tsize ?? ''}`.trim() : '—'}
+                    {Array.isArray(item.item_var) && item.item_var.length > 0 
+                      ? item.item_var.map((v: any) => [v.color, v.ssize, v.tsize].filter(Boolean).join('/')).join(', ')
+                      : '—'}
                   </td>
                   <td className="py-3 px-3">
                     <div className="flex gap-2">
@@ -218,20 +217,83 @@ export default function ItemsPanel() {
                   {types.map((t) => <option key={t.id} value={t.id}>{t.name}</option>)}
                 </select>
               </Field>
-              <Field label="Variant (item_var)">
-                <select
-                  className="w-full px-3 py-2.5 border border-black/15 bg-cream text-sm font-sans focus:outline-none focus:border-charcoal appearance-none"
-                  value={form.item_var} onChange={(e) => setForm({ ...form, item_var: e.target.value })}
-                >
-                  <option value="">— เลือก variant —</option>
-                  {vars.map((v) => (
-                    <option key={v.id} value={v.id}>
-                      {[v.color, v.ssize, v.tsize].filter(Boolean).join(' / ')}
-                    </option>
-                  ))}
-                </select>
-              </Field>
             </div>
+
+            <div className="h-px bg-black/10 my-2" />
+            
+            <div className="flex flex-col gap-3">
+              <div className="flex items-center justify-between">
+                <span className="text-[11px] tracking-[0.15em] uppercase text-muted font-normal">ตัวเลือกสินค้า (สี/ขนาด)</span>
+                <button
+                  type="button"
+                  onClick={() => {
+                    const existing = (form as any).variants || [];
+                    setForm({ ...form, variants: [...existing, { color: '', ssize: '', tsize: '' }] } as any);
+                  }}
+                  className="text-[10px] px-2 py-1 bg-charcoal text-white border-none cursor-pointer hover:bg-charcoal-light"
+                >
+                  + เพิ่มตัวเลือก
+                </button>
+              </div>
+
+              {((form as any).variants || []).map((v: any, idx: number) => (
+                <div key={idx} className="grid grid-cols-4 gap-2 items-end bg-cream-dark/50 p-3 rounded border border-black/5">
+                  <Field label="สี">
+                    <input
+                      className="w-full px-2 py-1.5 border border-black/10 bg-cream text-xs focus:outline-none focus:border-charcoal"
+                      value={v.color} 
+                      onChange={(e) => {
+                        const newVars = [...(form as any).variants];
+                        newVars[idx].color = e.target.value;
+                        setForm({ ...form, variants: newVars } as any);
+                      }}
+                      placeholder="เช่น คราม"
+                    />
+                  </Field>
+                  <Field label="ไซส์เครื่องดนตรี">
+                    <input
+                      className="w-full px-2 py-1.5 border border-black/10 bg-cream text-xs focus:outline-none focus:border-charcoal"
+                      value={v.tsize}
+                      onChange={(e) => {
+                        const newVars = [...(form as any).variants];
+                        newVars[idx].tsize = e.target.value;
+                        setForm({ ...form, variants: newVars } as any);
+                      }}
+                      placeholder="เช่น เล็ก"
+                    />
+                  </Field>
+                  <Field label="ไซส์เสื้อ">
+                    <input
+                      className="w-full px-2 py-1.5 border border-black/10 bg-cream text-xs focus:outline-none focus:border-charcoal"
+                      value={v.ssize}
+                      onChange={(e) => {
+                        const newVars = [...(form as any).variants];
+                        newVars[idx].ssize = e.target.value;
+                        setForm({ ...form, variants: newVars } as any);
+                      }}
+                      placeholder="เช่น M"
+                    />
+                  </Field>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const newVars = (form as any).variants.filter((_: any, i: number) => i !== idx);
+                      setForm({ ...form, variants: newVars } as any);
+                    }}
+                    className="mb-1 text-vermillion hover:text-white hover:bg-vermillion border border-vermillion/20 py-1 transition-colors text-[10px]"
+                  >
+                    ลบ
+                  </button>
+                </div>
+              ))}
+              
+              {(!(form as any).variants || (form as any).variants.length === 0) && (
+                <p className="text-xs text-muted font-light text-center py-4 bg-cream-dark/30 rounded border border-dashed border-black/10">
+                  ยังไม่มีตัวเลือกสินค้า
+                </p>
+              )}
+            </div>
+
             <SubmitBtn loading={saving} />
           </form>
         </Modal>

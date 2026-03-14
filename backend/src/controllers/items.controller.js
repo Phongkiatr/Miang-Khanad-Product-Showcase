@@ -22,7 +22,7 @@ export async function getItems(req, res) {
       .select(
         `id, created_at, name, description, price, imgsrc,
          item_type ( id, name ),
-         item_var  ( id, color, ssize, tsize )`,
+         item_var ( id, color, ssize, tsize )`,
         { count: 'exact' }
       )
       .order('created_at', { ascending: false })
@@ -61,7 +61,7 @@ export async function getItemById(req, res) {
       .select(
         `id, created_at, name, description, price, imgsrc,
          item_type ( id, name ),
-         item_var  ( id, color, ssize, tsize )`
+         item_var ( id, color, ssize, tsize )`
       )
       .eq('id', id)
       .single();
@@ -78,24 +78,36 @@ export async function getItemById(req, res) {
 /**
  * POST /api/items
  * Create a new product entry (Admin Only).
+ * Now supports passing an array of variants.
  */
 export async function createItem(req, res) {
   try {
-    const { name, description, price, item_type, imgsrc, item_var } = req.body;
+    const { name, description, price, item_type, imgsrc, variants } = req.body;
 
-    const { data, error } = await supabase
+    // 1. Create the item
+    const { data: item, error: itemError } = await supabase
       .from('Items')
-      .insert({ name, description, price, item_type, imgsrc, item_var })
-      .select(
-        `id, created_at, name, description, price, imgsrc,
-         item_type ( id, name ),
-         item_var  ( id, color, ssize, tsize )`
-      )
+      .insert({ name, description, price, item_type, imgsrc })
+      .select()
       .single();
 
-    if (error) return serverError(res, error.message);
+    if (itemError) return serverError(res, itemError.message);
 
-    return created(res, data);
+    // 2. If variants provided, insert them linked to the new item
+    if (Array.isArray(variants) && variants.length > 0) {
+      const varsToInsert = variants.map(v => ({
+        ...v,
+        item_id: item.id
+      }));
+      const { error: varError } = await supabase
+        .from('item_var')
+        .insert(varsToInsert);
+      
+      if (varError) console.error('Error inserting variants:', varError.message);
+    }
+
+    // 3. Re-fetch full item with variants for response
+    return getItemById({ params: { id: item.id } }, res);
   } catch (err) {
     return serverError(res, err.message);
   }
@@ -108,7 +120,7 @@ export async function createItem(req, res) {
 export async function updateItem(req, res) {
   try {
     const { id } = req.params;
-    const { name, description, price, item_type, imgsrc, item_var } = req.body;
+    const { name, description, price, item_type, imgsrc, variants } = req.body;
 
     // Filter provided fields for update
     const updates = {};
@@ -117,26 +129,34 @@ export async function updateItem(req, res) {
     if (price       !== undefined) updates.price       = price;
     if (item_type   !== undefined) updates.item_type   = item_type;
     if (imgsrc      !== undefined) updates.imgsrc      = imgsrc;
-    if (item_var    !== undefined) updates.item_var    = item_var;
 
-    if (Object.keys(updates).length === 0)
-      return badRequest(res, 'No fields provided to update');
+    if (Object.keys(updates).length > 0) {
+      const { error: updateError } = await supabase
+        .from('Items')
+        .update(updates)
+        .eq('id', id);
+      
+      if (updateError) return serverError(res, updateError.message);
+    }
 
-    const { data, error } = await supabase
-      .from('Items')
-      .update(updates)
-      .eq('id', id)
-      .select(
-        `id, created_at, name, description, price, imgsrc,
-         item_type ( id, name ),
-         item_var  ( id, color, ssize, tsize )`
-      )
-      .single();
+    // Handle Variants Syncing (Simple approach: delete old and insert new)
+    if (variants !== undefined && Array.isArray(variants)) {
+      // 1. Delete existing variants for this item
+      await supabase.from('item_var').delete().eq('item_id', id);
 
-    if (error && error.code === 'PGRST116') return notFound(res, 'Item');
-    if (error) return serverError(res, error.message);
+      // 2. Insert new variants
+      if (variants.length > 0) {
+        const varsToInsert = variants.map(v => ({
+          color: v.color,
+          ssize: v.ssize,
+          tsize: v.tsize,
+          item_id: id
+        }));
+        await supabase.from('item_var').insert(varsToInsert);
+      }
+    }
 
-    return ok(res, data);
+    return getItemById({ params: { id } }, res);
   } catch (err) {
     return serverError(res, err.message);
   }
