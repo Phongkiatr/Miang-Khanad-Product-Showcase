@@ -17,15 +17,22 @@ export default function ItemsPanel() {
   const [saving, setSaving] = useState(false);
   const [toast, setToast] = useState<{ msg: string; type: 'success' | 'error' } | null>(null);
 
-  const load = useCallback(async () => {
+  // Function to load item types (only once)
+  const loadItemTypes = useCallback(async () => {
+    try {
+      const typesRes = await api.itemTypes.list();
+      setTypes(typesRes.data ?? []);
+    } catch {
+      setToast({ msg: 'โหลดหมวดหมู่ล้มเหลว', type: 'error' });
+    }
+  }, []);
+
+  // Function to load items with an optional search query
+  const loadItems = useCallback(async (query?: string) => {
     setLoading(true);
     try {
-      const [itemsRes, typesRes] = await Promise.all([
-        api.items.list(),
-        api.itemTypes.list(),
-      ]);
-      setItems(itemsRes.data ?? []);
-      setTypes(typesRes.data ?? []);
+      const res = await api.items.list({ search: query });
+      setItems(res.data ?? []);
     } catch {
       setToast({ msg: 'โหลดข้อมูลล้มเหลว', type: 'error' });
     } finally {
@@ -33,7 +40,18 @@ export default function ItemsPanel() {
     }
   }, []);
 
-  useEffect(() => { load(); }, [load]);
+  // Initial load for item types
+  useEffect(() => {
+    loadItemTypes();
+  }, [loadItemTypes]);
+
+  // Debounced effect for search
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      loadItems(search);
+    }, 400);
+    return () => clearTimeout(timer);
+  }, [search, loadItems]);
 
   const openCreate = () => { setForm(EMPTY_FORM); setEditing(null); setShowModal(true); };
   const openEdit = (item: any) => {
@@ -65,7 +83,7 @@ export default function ItemsPanel() {
       else await api.items.create(body);
       setToast({ msg: editing ? 'แก้ไขสำเร็จ' : 'เพิ่มสินค้าสำเร็จ', type: 'success' });
       setShowModal(false);
-      load();
+      loadItems(search);
     } catch (err: any) {
       setToast({ msg: err.message, type: 'error' });
     } finally {
@@ -78,17 +96,13 @@ export default function ItemsPanel() {
     try {
       await api.items.delete(confirmId);
       setToast({ msg: 'ลบสินค้าสำเร็จ', type: 'success' });
-      load();
+      loadItems(search);
     } catch (err: any) {
       setToast({ msg: err.message, type: 'error' });
     } finally {
       setConfirmId(null);
     }
   };
-
-  const filtered = items.filter((i) =>
-    i.name?.toLowerCase().includes(search.toLowerCase())
-  );
 
   return (
     <div>
@@ -118,7 +132,7 @@ export default function ItemsPanel() {
       </div>
 
       {/* Table */}
-      {loading ? <Spinner /> : filtered.length === 0 ? <Empty label="ยังไม่มีสินค้า" /> : (
+      {loading ? <Spinner /> : items.length === 0 ? <Empty label="ยังไม่มีสินค้า" /> : (
         <div className="overflow-x-auto">
           <table className="w-full text-sm border-collapse">
             <thead>
@@ -131,8 +145,8 @@ export default function ItemsPanel() {
                 ))}
               </tr>
             </thead>
-            <tbody>
-              {filtered.map((item) => (
+            <tbody className="divide-y divide-black/5">
+              {items.map((item: any) => (
                 <tr key={item.id} className="border-b border-black/5 hover:bg-cream-dark transition-colors">
                   <td className="py-3 px-3 text-muted font-light">{item.id}</td>
                   <td className="py-3 px-3">

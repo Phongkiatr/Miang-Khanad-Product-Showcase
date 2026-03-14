@@ -4,24 +4,26 @@ import ItemsPanel from '../components/admin/ItemsPanel';
 import VariantsPanel from '../components/admin/VariantsPanel';
 import InquiryLogsPanel from '../components/admin/InquiryLogsPanel';
 import DatabaseBrowserPanel from '../components/admin/DatabaseBrowserPanel';
+import SettingsPanel from '../components/admin/SettingsPanel';
 import { api } from '../lib/api';
 
 // ─── Config ───────────────────────────────────────────────────────────────────
 const SESSION_KEY = 'mk_admin_token';
 
-type Tab = 'items' | 'variants' | 'logs' | 'database';
+type Tab = 'items' | 'variants' | 'logs' | 'database' | 'settings';
 
 const TABS: { key: Tab; label: string; icon: string }[] = [
-  { key: 'items',    label: 'สินค้า',              icon: '◈' },
+  { key: 'items', label: 'สินค้า', icon: '◈' },
   { key: 'variants', label: 'หมวดหมู่สินค้า', icon: '◇' },
-  { key: 'logs',     label: 'Inquiry Logs',         icon: '◎' },
-  { key: 'database', label: 'Database Browser',    icon: '▤' },
+  { key: 'logs', label: 'Inquiry Logs', icon: '◎' },
+  { key: 'database', label: 'Database Browser', icon: '▤' },
+  { key: 'settings', label: 'Settings', icon: '⚙' },
 ];
 
 // ─── Password Gate ────────────────────────────────────────────────────────────
 function PasswordGate({ onUnlock }: { onUnlock: () => void }) {
-  const [value, setValue]   = useState('');
-  const [error, setError]   = useState(false);
+  const [value, setValue] = useState('');
+  const [error, setError] = useState(false);
   const [shaking, setShake] = useState(false);
 
   const submit = async (e: React.FormEvent) => {
@@ -51,7 +53,7 @@ function PasswordGate({ onUnlock }: { onUnlock: () => void }) {
         <form onSubmit={submit} className="flex flex-col gap-4">
           <div className="flex flex-col gap-2">
             <label className="text-[11px] tracking-[0.2em] uppercase text-white/50 font-normal">
-              รหัสผ่าน
+              Admin Key
             </label>
             <input
               type="password"
@@ -62,10 +64,10 @@ function PasswordGate({ onUnlock }: { onUnlock: () => void }) {
                            border ${error ? 'border-vermillion' : 'border-white/20'}
                            focus:outline-none focus:border-white/60 transition-colors font-sans
                            placeholder:text-white/25`}
-              placeholder="ใส่รหัสผ่าน..."
+              placeholder="Enter Key"
             />
             {error && (
-              <p className="text-xs text-vermillion font-light">รหัสผ่านไม่ถูกต้อง</p>
+              <p className="text-xs text-vermillion font-light">Key is not valid.</p>
             )}
           </div>
           <button
@@ -97,7 +99,7 @@ function PasswordGate({ onUnlock }: { onUnlock: () => void }) {
 
 // ─── Admin Layout ─────────────────────────────────────────────────────────────
 function AdminLayout() {
-  const [tab, setTab]           = useState<Tab>('items');
+  const [tab, setTab] = useState<Tab>('items');
   const [sidebarOpen, setSidebar] = useState(false);
 
   const logout = () => {
@@ -132,8 +134,8 @@ function AdminLayout() {
               className={`flex items-center gap-3 px-4 py-3 text-sm font-sans text-left
                            border-none cursor-pointer transition-all duration-200
                            ${tab === t.key
-                             ? 'bg-white/10 text-white font-semibold'
-                             : 'bg-transparent text-white/50 hover:text-white hover:bg-white/5'}`}
+                  ? 'bg-white/10 text-white font-semibold'
+                  : 'bg-transparent text-white/50 hover:text-white hover:bg-white/5'}`}
             >
               <span className="text-base">{t.icon}</span>
               {t.label}
@@ -199,9 +201,10 @@ function AdminLayout() {
 
         {/* Content */}
         <main className="flex-1 px-10 py-8 max-w-[1400px] w-full mx-auto">
-          {tab === 'items'    && <ItemsPanel />}
+          {tab === 'items' && <ItemsPanel />}
           {tab === 'variants' && <VariantsPanel />}
-          {tab === 'logs'     && <InquiryLogsPanel />}
+          {tab === 'settings' && <SettingsPanel />}
+          {tab === 'logs' && <InquiryLogsPanel />}
           {tab === 'database' && <DatabaseBrowserPanel />}
         </main>
       </div>

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { ApiItem, logInquiry } from '../services/api';
 import { formatPrice, buildLineMessage, buildLineUrl } from '../utils/productUtils';
+import { useSettings } from '../context/SettingsContext';
 
 interface ProductCardProps {
   item: ApiItem;
@@ -20,6 +21,7 @@ const LineIcon = () => (
  */
 export default function ProductCard({ item, onSelect }: ProductCardProps) {
   const [hovered, setHovered] = useState(false);
+  const { settings } = useSettings();
 
   // เตรียมข้อมูลพื้นฐาน
   const categoryLabel = item.item_type?.name ?? 'สินค้า';
@@ -44,7 +46,8 @@ export default function ProductCard({ item, onSelect }: ProductCardProps) {
     const variants = Array.isArray(item.variants) ? item.variants : [];
     const firstColor = variants.length > 0 ? variants[0].color : undefined;
     const msg = buildLineMessage(item.name, firstColor || undefined);
-    window.open(buildLineUrl(msg), '_blank', 'noopener,noreferrer');
+    const url = buildLineUrl(msg, settings.line_id);
+    window.open(url, '_blank', 'noopener,noreferrer');
   };
 
   return (

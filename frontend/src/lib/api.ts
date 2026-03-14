@@ -21,7 +21,14 @@ async function request<T>(path: string, options?: RequestInit): Promise<T> {
 // ── Items ─────────────────────────────────────────────────────────────────────
 export const api = {
   items: {
-    list:   (q = '') => request<any>(`/api/items?limit=100${q}`),
+    list:   (params: { search?: string; category?: number; page?: number; limit?: number } = {}) => {
+      const qs = new URLSearchParams();
+      if (params.search) qs.set('search', params.search);
+      if (params.category) qs.set('category', String(params.category));
+      if (params.page) qs.set('page', String(params.page));
+      qs.set('limit', String(params.limit || 100));
+      return request<any>(`/api/items?${qs.toString()}`);
+    },
     get:    (id: number) => request<any>(`/api/items/${id}`),
     create: (body: object) => request<any>('/api/items', { method: 'POST', body: JSON.stringify(body) }),
     update: (id: number, body: object) => request<any>(`/api/items/${id}`, { method: 'PATCH', body: JSON.stringify(body) }),
@@ -46,5 +53,9 @@ export const api = {
   },
   auth: {
     login: (password: string) => request<any>('/api/auth/login', { method: 'POST', body: JSON.stringify({ password }) }),
+  },
+  settings: {
+    get:    () => request<any>('/api/settings'),
+    update: (body: object) => request<any>('/api/settings', { method: 'PATCH', body: JSON.stringify(body) }),
   },
 };

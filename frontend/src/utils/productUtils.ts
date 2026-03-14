@@ -29,6 +29,6 @@ export function buildLineMessage(
 /**
  * Builds the full LINE OA deep link URL
  */
-export function buildLineUrl(message: string): string {
-  return `https://line.me/R/oaMessage/${LINE_OA_ID}/?${encodeURIComponent(message)}`;
+export function buildLineUrl(message: string, lineId: string = LINE_OA_ID): string {
+  return `https://line.me/R/oaMessage/${lineId}/?${encodeURIComponent(message)}`;
 }

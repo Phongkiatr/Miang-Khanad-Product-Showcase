@@ -4,6 +4,7 @@ import { useProducts } from '../hooks/useProducts';
 import { ApiItem } from '../services/api';
 import { formatPrice } from '../utils/productUtils';
 import ProductCard from '../components/ProductCard';
+import { useSettings } from '../context/SettingsContext';
 
 // interface HomePageProps removed
 
@@ -33,6 +34,8 @@ function SkeletonCard() {
 
 export default function HomePage() {
   const navigate = useNavigate();
+  const { settings } = useSettings();
+  const lineUrl = `https://line.me/R/ti/p/${settings.line_id.startsWith('@') ? settings.line_id : `@${settings.line_id}`}`;
   
   // ดึงข้อมูลสินค้า 3 ชิ้นแรกจาก API เพื่อแสดงเป็นสินค้าแนะนำ (Featured)
   const { items: featured, loading } = useProducts({ limit: 3 });
@@ -72,7 +75,7 @@ export default function HomePage() {
               เลือกดูสินค้า
             </button>
             <a
-              href="https://line.me/R/ti/p/@miang-khanad"
+              href={lineUrl}
               target="_blank"
               rel="noopener noreferrer"
               className="btn-ghost"
@@ -209,7 +212,7 @@ export default function HomePage() {
           มีคำถาม? เราพร้อมตอบทุกข้อสงสัย
         </h2>
         <a
-          href="https://line.me/R/ti/p/@miang-khanad"
+          href={lineUrl}
           target="_blank"
           rel="noopener noreferrer"
           className="btn-line"

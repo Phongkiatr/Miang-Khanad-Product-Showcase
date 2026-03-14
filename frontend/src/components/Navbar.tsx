@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import { useSettings } from '../context/SettingsContext';
 
 const LineIcon = () => (
   <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
@@ -14,9 +15,12 @@ const LineIcon = () => (
  */
 
 export default function Navbar() {
+  const { settings } = useSettings();
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const location = useLocation();
+
+  const lineUrl = `https://line.me/R/ti/p/${settings.line_id.startsWith('@') ? settings.line_id : `@${settings.line_id}`}`;
 
   // จัดการการเปลี่ยนสถานะ Navbar เมื่อมีการเลื่อนหน้าจอ (Scroll)
   useEffect(() => {
@@ -80,7 +84,7 @@ export default function Navbar() {
 
           {/* ปุ่มติดต่อด่วนผ่าน Line */}
           <a
-            href="https://line.me/R/ti/p/@miang-khanad"
+            href={lineUrl}
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center gap-2 px-5 py-2 bg-charcoal text-white text-[13px]
@@ -131,13 +135,13 @@ export default function Navbar() {
             </Link>
           ))}
           <a
-            href="https://line.me/R/ti/p/@miang-khanad"
+            href={lineUrl}
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center gap-2 text-base font-light text-[#06C755] no-underline"
           >
             <LineIcon />
-            Line OA: @miang-khanad
+            Line OA: {settings.line_id}
           </a>
         </div>
       )}

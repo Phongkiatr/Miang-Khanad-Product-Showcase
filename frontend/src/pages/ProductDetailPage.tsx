@@ -3,6 +3,7 @@ import { useParams, useNavigate, Link } from 'react-router-dom';
 import { useProduct, useProducts } from '../hooks/useProducts';
 import { logInquiry } from '../services/api';
 import { formatPrice, buildLineMessage, buildLineUrl } from '../utils/productUtils';
+import { useSettings } from '../context/SettingsContext';
 import ProductCard from '../components/ProductCard';
 
 // interface Props removed
@@ -28,7 +29,8 @@ export default function ProductDetailPage() {
   const { item, loading, error } = useProduct(isNaN(numericId) ? null : numericId);
 
   // ดึงรายการผลิตภัณฑ์ที่เกี่ยวข้อง (Related Products) มาแสดงด้านล่าง
-  const { items: related } = useProducts({ limit: 4 });
+  const { items: related } = useProducts({ category: item?.item_type?.id, limit: 4 });
+  const { settings } = useSettings();
 
   // State สำหรับจัดการตัวเลือกที่ลูกค้าคลิก (สี/ไซส์) และสถานะการซูมรูปภาพ
   const [selectedColor, setSelectedColor] = useState<string>('');
@@ -111,7 +113,7 @@ export default function ProductDetailPage() {
     selectedColor || undefined,
     selectedSize || undefined
   );
-  const lineUrl = buildLineUrl(lineMsg);
+  const lineUrl = buildLineUrl(lineMsg, settings.line_id);
 
   // ─── จัดการการคลิกสั่งซื้อ (Line CTA Click) ──────────────────────────
 
