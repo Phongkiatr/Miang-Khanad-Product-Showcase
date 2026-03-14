@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { ApiItem, logInquiry } from '../services/api';
-import { formatPrice, buildLineMessage, buildLineUrl } from '../data/mockData';
+import { formatPrice, buildLineMessage, buildLineUrl } from '../utils/productUtils';
 
 interface ProductCardProps {
   item: ApiItem;

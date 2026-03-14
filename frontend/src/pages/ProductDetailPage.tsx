@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { useProduct, useProducts } from '../hooks/useProducts';
 import { logInquiry } from '../services/api';
-import { formatPrice, buildLineMessage, buildLineUrl } from '../data/mockData';
+import { formatPrice, buildLineMessage, buildLineUrl } from '../utils/productUtils';
 import ProductCard from '../components/ProductCard';
 
 // interface Props removed

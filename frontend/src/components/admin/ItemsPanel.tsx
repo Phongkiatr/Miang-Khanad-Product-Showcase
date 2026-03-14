@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { api } from '../../lib/api';
 import { Modal, Confirm, Field, SubmitBtn, Empty, Spinner, Toast } from './AdminUI';
-import { formatPrice } from '../../data/mockData';
+import { formatPrice } from '../../utils/productUtils';
 
 const EMPTY_FORM = { name: '', description: '', price: '', item_type: '', imgsrc: '', variants: [] as any[] };
 

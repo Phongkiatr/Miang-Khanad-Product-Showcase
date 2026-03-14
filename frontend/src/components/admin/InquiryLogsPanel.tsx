@@ -1,13 +1,11 @@
 import { useState, useEffect, useCallback } from 'react';
 import { api } from '../../lib/api';
-import { StatCard, Confirm, Empty, Spinner, Toast } from './AdminUI';
-import { formatPrice } from '../../data/mockData';
+import { StatCard, Empty, Spinner, Toast } from './AdminUI';
 
 export default function InquiryLogsPanel() {
   const [logs, setLogs]         = useState<any[]>([]);
   const [stats, setStats]       = useState<any>(null);
   const [loading, setLoading]   = useState(true);
-  const [confirmId, setConfirmId] = useState<number | null>(null);
   const [toast, setToast]       = useState<{ msg: string; type: 'success' | 'error' } | null>(null);
 
   const load = useCallback(async () => {
@@ -28,18 +26,6 @@ export default function InquiryLogsPanel() {
 
   useEffect(() => { load(); }, [load]);
 
-  const handleDelete = async () => {
-    if (!confirmId) return;
-    try {
-      await api.inquiryLogs.delete(confirmId);
-      setToast({ msg: 'ลบ log สำเร็จ', type: 'success' });
-      load();
-    } catch (err: any) {
-      setToast({ msg: err.message, type: 'error' });
-    } finally {
-      setConfirmId(null);
-    }
-  };
 
   return (
     <div>
@@ -107,7 +93,7 @@ export default function InquiryLogsPanel() {
           <table className="w-full text-sm border-collapse">
             <thead>
               <tr className="border-b border-black/10">
-                {['ID', 'สินค้า', 'ราคา', 'เวลา', ''].map((h) => (
+                {['ID', 'สินค้า', 'เวลา'].map((h) => (
                   <th key={h} className="text-left py-3 px-3 text-[11px] tracking-[0.15em] uppercase text-muted font-normal">
                     {h}
                   </th>
@@ -128,37 +114,17 @@ export default function InquiryLogsPanel() {
                       </span>
                     </div>
                   </td>
-                  <td className="py-3 px-3 text-vermillion font-semibold">
-                    {log.Items?.price ? formatPrice(log.Items.price) : '—'}
-                  </td>
                   <td className="py-3 px-3 text-muted font-light text-xs">
                     {new Date(log.created_at).toLocaleString('th-TH', {
                       dateStyle: 'short',
                       timeStyle: 'short',
                     })}
                   </td>
-                  <td className="py-3 px-3">
-                    <button
-                      onClick={() => setConfirmId(log.id)}
-                      className="text-xs px-2.5 py-1 border border-vermillion/30 text-vermillion bg-transparent
-                                 hover:bg-vermillion hover:text-white cursor-pointer transition-colors font-sans"
-                    >
-                      ลบ
-                    </button>
-                  </td>
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
-      )}
-
-      {confirmId && (
-        <Confirm
-          message="ต้องการลบ log นี้หรือไม่?"
-          onConfirm={handleDelete}
-          onCancel={() => setConfirmId(null)}
-        />
       )}
 
       {toast && <Toast message={toast.msg} type={toast.type} onDone={() => setToast(null)} />}

@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useProducts } from '../hooks/useProducts';
 import { ApiItem } from '../services/api';
-import { formatPrice } from '../data/mockData';
+import { formatPrice } from '../utils/productUtils';
 import ProductCard from '../components/ProductCard';
 
 // interface HomePageProps removed
