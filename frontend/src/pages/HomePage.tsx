@@ -166,8 +166,8 @@ export default function HomePage() {
         </div>
 
         {/* ตัวบอกใบ้การเลื่อนหน้า (Scroll Indicator) */}
-        <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 z-30
-                         animate-fade-in opacity-0 delay-600">
+        <div className="absolute bottom-10 left-0 right-0 flex flex-col items-center gap-2 z-30
+                 animate-fade-in opacity-0 delay-600">
           <span className="text-[10px] tracking-[0.3em] text-muted uppercase">เลื่อนลง</span>
           <div className="w-px h-12 bg-gradient-to-b from-muted to-transparent animate-[scrollPulse_2s_ease_infinite]" />
         </div>
