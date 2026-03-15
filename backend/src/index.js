@@ -61,3 +61,5 @@ app.listen(PORT, () => {
   console.log(`✅  MeangKanad API running on http://localhost:${PORT}`);
   console.log(`   ENV: ${process.env.NODE_ENV || 'development'}`);
 });
+
+export default app;
