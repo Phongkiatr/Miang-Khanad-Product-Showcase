@@ -189,3 +189,20 @@ export function StatCard({ label, value, accent }: { label: string; value: strin
     </div>
   );
 }
+
+// ── Icon ──────────────────────────────────────────────────────────────────────
+interface LIconProps {
+  name: string;
+  size?: 'xs' | 'sm' | 'base' | 'lg' | 'xl';
+  className?: string;
+}
+export function LIcon({ name, size = 'base', className = '' }: LIconProps) {
+  const sizeMap = {
+    xs: 'text-[10px]',
+    sm: 'text-xs',
+    base: 'text-base',
+    lg: 'text-lg',
+    xl: 'text-xl',
+  };
+  return <i className={`lni lni-${name} ${sizeMap[size] || sizeMap.base} ${className}`} />;
+}

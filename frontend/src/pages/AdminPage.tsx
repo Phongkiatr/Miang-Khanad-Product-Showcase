@@ -5,19 +5,22 @@ import VariantsPanel from '../components/admin/VariantsPanel';
 import InquiryLogsPanel from '../components/admin/InquiryLogsPanel';
 import DatabaseBrowserPanel from '../components/admin/DatabaseBrowserPanel';
 import SettingsPanel from '../components/admin/SettingsPanel';
+import MediaPanel from '../components/admin/MediaPanel';
+import { LIcon } from '../components/admin/AdminUI';
 import { api } from '../lib/api';
 
 // ─── Config ───────────────────────────────────────────────────────────────────
 const SESSION_KEY = 'mk_admin_token';
 
-type Tab = 'items' | 'variants' | 'logs' | 'database' | 'settings';
+type Tab = 'items' | 'variants' | 'media' | 'logs' | 'database' | 'settings';
 
 const TABS: { key: Tab; label: string; icon: string }[] = [
-  { key: 'items', label: 'สินค้า', icon: '◈' },
-  { key: 'variants', label: 'หมวดหมู่สินค้า', icon: '◇' },
-  { key: 'logs', label: 'Inquiry Logs', icon: '◎' },
-  { key: 'database', label: 'Database Browser', icon: '▤' },
-  { key: 'settings', label: 'Settings', icon: '⚙' },
+  { key: 'items', label: 'สินค้า', icon: 'package' },
+  { key: 'variants', label: 'หมวดหมู่สินค้า', icon: 'grid-alt' },
+  { key: 'media', label: 'จัดการรูปภาพ', icon: 'image' },
+  { key: 'logs', label: 'Inquiry Logs', icon: 'customer' },
+  { key: 'database', label: 'Database Browser', icon: 'database' },
+  { key: 'settings', label: 'Settings', icon: 'cog' },
 ];
 
 // ─── Password Gate ────────────────────────────────────────────────────────────
@@ -137,7 +140,7 @@ function AdminLayout() {
                   ? 'bg-white/10 text-white font-semibold'
                   : 'bg-transparent text-white/50 hover:text-white hover:bg-white/5'}`}
             >
-              <span className="text-base">{t.icon}</span>
+              <LIcon name={t.icon} className="text-base" />
               {t.label}
               {tab === t.key && (
                 <span className="ml-auto w-1 h-1 rounded-full bg-gold" />
@@ -203,6 +206,7 @@ function AdminLayout() {
         <main className="flex-1 px-10 py-8 max-w-[1400px] w-full mx-auto">
           {tab === 'items' && <ItemsPanel />}
           {tab === 'variants' && <VariantsPanel />}
+          {tab === 'media' && <MediaPanel />}
           {tab === 'settings' && <SettingsPanel />}
           {tab === 'logs' && <InquiryLogsPanel />}
           {tab === 'database' && <DatabaseBrowserPanel />}

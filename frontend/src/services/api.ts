@@ -153,3 +153,61 @@ export async function login(password: string) {
     body: JSON.stringify({ password }),
   });
 }
+
+// ─── Media Management ─────────────────────────────────────────────────────────
+
+export interface ApiMediaFile {
+  name: string;
+  url: string;
+  created_at: string;
+  metadata: {
+    mimetype: string;
+    size: number;
+  };
+}
+
+/**
+ * Fetch all images from the gallery storage
+ */
+export async function fetchMediaList() {
+  return apiFetch<ApiSingleResponse<ApiMediaFile[]>>('/api/media');
+}
+
+/**
+ * Upload an image to storage
+ */
+export async function uploadImage(file: File, customName?: string) {
+  const formData = new FormData();
+  formData.append('image', file);
+  if (customName) {
+    formData.append('customName', customName);
+  }
+
+  const token = sessionStorage.getItem('mk_admin_token');
+  const headers: Record<string, string> = {};
+  if (token) {
+    headers['Authorization'] = `Bearer ${token}`;
+  }
+
+  const res = await fetch(`${BASE_URL}/api/media/upload`, {
+    method: 'POST',
+    headers,
+    body: formData,
+  });
+
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.message || `Upload error ${res.status}`);
+  }
+
+  return res.json() as Promise<ApiSingleResponse<{ name: string; url: string }>>;
+}
+
+/**
+ * Delete an image by name
+ */
+export async function deleteImage(name: string) {
+  return apiFetch(`/api/media/${name}`, {
+    method: 'DELETE',
+  });
+}

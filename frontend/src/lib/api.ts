@@ -13,7 +13,11 @@ async function request<T>(path: string, options?: RequestInit): Promise<T> {
     ...options,
   });
   
-  const json = await res.json();
+  if (res.status === 204) return {} as T;
+  
+  const text = await res.text();
+  const json = text ? JSON.parse(text) : {};
+  
   if (!res.ok) throw new Error(json.message ?? 'Request failed');
   return json;
 }
@@ -57,5 +61,27 @@ export const api = {
   settings: {
     get:    () => request<any>('/api/settings'),
     update: (body: object) => request<any>('/api/settings', { method: 'PATCH', body: JSON.stringify(body) }),
+  },
+  media: {
+    list:   () => request<any>('/api/media'),
+    upload: (file: File, customName?: string) => {
+      const formData = new FormData();
+      formData.append('image', file);
+      if (customName) formData.append('customName', customName);
+      
+      const token = sessionStorage.getItem('mk_admin_token');
+      const headers: Record<string, string> = {};
+      if (token) headers['Authorization'] = `Bearer ${token}`;
+
+      return fetch(`${BASE}/api/media/upload`, {
+        method: 'POST',
+        headers,
+        body: formData,
+      }).then(res => {
+        if (!res.ok) return res.json().then(j => { throw new Error(j.message || 'Upload failed'); });
+        return res.json();
+      });
+    },
+    delete: (name: string) => request<any>(`/api/media/${name}`, { method: 'DELETE' }),
   },
 };

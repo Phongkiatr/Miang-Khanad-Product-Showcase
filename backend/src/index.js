@@ -11,6 +11,7 @@ import itemVarsRouter     from './routes/itemVars.routes.js';
 import inquiryLogsRouter  from './routes/inquiryLogs.routes.js';
 import settingsRouter     from './routes/settings.routes.js';
 import authRouter         from './routes/auth.routes.js';
+import mediaRouter        from './routes/media.routes.js';
 // Error and Middleware imports
 import { errorHandler, notFoundHandler } from './middleware/response.js';
 
@@ -47,6 +48,7 @@ app.use('/api/item-vars',     itemVarsRouter);
 app.use('/api/inquiry-logs',  inquiryLogsRouter);
 app.use('/api/settings',      settingsRouter);
 app.use('/api/auth',          authRouter);
+app.use('/api/media',         mediaRouter);
 
 // ─── Error handlers (must be last) ───────────────────────────────────────────
 
