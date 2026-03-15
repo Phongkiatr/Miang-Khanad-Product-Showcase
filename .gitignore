@@ -45,5 +45,3 @@ Thumbs.db
 # Local configuration
 .supabase/
 check_supabase.js
-
-SUMMARY_TODAY.md
