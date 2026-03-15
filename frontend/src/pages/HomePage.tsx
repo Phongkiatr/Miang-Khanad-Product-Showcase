@@ -52,7 +52,7 @@ export default function HomePage() {
       {/* ─── ส่วน Hero: แนะนำแบรนด์และ Call to Action ─── */}
       <section className="min-h-svh relative overflow-hidden bg-cream">
         {/* ฝั่งขวา: รูปภาพ Hero และ Floating Card สำหรับ Desktop (Absolute Background) */}
-        <div className="absolute top-0 right-0 w-1/2 h-full hidden md:block animate-scale-in opacity-0 delay-100 z-0">
+        <div className="absolute top-0 right-0 w-1/2 h-full hidden md:block animate-scale-in opacity-0 delay-100 z-20">
           <img
             src="https://images.unsplash.com/photo-1558769132-cb1aea458c5e?w=1200&q=85"
             alt="เมียงขนาด hero"
