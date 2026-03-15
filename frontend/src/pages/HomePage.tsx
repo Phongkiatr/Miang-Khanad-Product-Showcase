@@ -36,7 +36,7 @@ export default function HomePage() {
   const navigate = useNavigate();
   const { settings } = useSettings();
   const lineUrl = `https://line.me/R/ti/p/${settings.line_id.startsWith('@') ? settings.line_id : `@${settings.line_id}`}`;
-  
+
   // ดึงข้อมูลสินค้า 3 ชิ้นแรกจาก API เพื่อแสดงเป็นสินค้าแนะนำ (Featured)
   const { items: featured, loading } = useProducts({ limit: 3 });
 
@@ -49,84 +49,110 @@ export default function HomePage() {
   return (
     <div>
       {/* ─── ส่วน Hero: แนะนำแบรนด์และ Call to Action ─── */}
-      <section className="min-h-svh grid grid-cols-1 md:grid-cols-2 relative overflow-hidden">
-
-        {/* ฝั่งซ้าย: ข้อความและปุ่มนำทาง */}
-        <div className="flex flex-col justify-end px-7 md:px-14 pt-36 pb-20 z-10 relative">
-          <div className="animate-fade-in opacity-0 flex items-center gap-3 mb-8">
-            <span className="block w-8 h-px bg-gold" />
-            <span className="label-section">ล้านนา Minimal Luxury</span>
-          </div>
-
-          <h1 className="animate-slide-up opacity-0 delay-200 font-bold leading-[1.15] text-charcoal mb-7
-                          text-4xl sm:text-5xl lg:text-6xl xl:text-7xl tracking-tight">
-            งานฝีมือที่<br />
-            <span className="text-vermillion">ทนกาลเวลา</span>
-          </h1>
-
-          <p className="animate-fade-in opacity-0 delay-400 text-base font-light text-charcoal-light
-                         leading-[1.9] max-w-sm mb-12">
-            สินค้าหัตถกรรมล้านนาคัดสรรพิเศษ ทั้งเครื่องแต่งกายผ้าทอมือ
-            และเครื่องดนตรีพื้นเมืองฝีมือช่างชำนาญ
-          </p>
-
-          <div className="animate-fade-in opacity-0 delay-500 flex flex-wrap gap-4">
-            <button onClick={() => navigate('/products')} className="btn-primary">
-              เลือกดูสินค้า
-            </button>
-            <a
-              href={lineUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="btn-ghost"
-            >
-              สอบถาม Line OA
-            </a>
-          </div>
-
-          {/* สถิติหรือจุดเด่นของแบรนด์ */}
-          <div className="animate-fade-in opacity-0 delay-600 flex gap-10 mt-16 pt-10 border-t border-black/10">
-            {[
-              { num: '10+', label: 'ปีแห่งประสบการณ์' },
-              { num: '50+', label: 'รายการสินค้า' },
-              { num: '100%', label: 'งานฝีมือแท้' },
-            ].map((stat) => (
-              <div key={stat.label}>
-                <div className="text-2xl font-bold text-charcoal leading-none">{stat.num}</div>
-                <div className="text-xs font-light text-muted mt-1 tracking-wide">{stat.label}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* ฝั่งขวา: รูปภาพ Hero และ Floating Card สำหรับ Desktop */}
-        <div className="relative overflow-hidden md:block hidden animate-scale-in opacity-0 delay-100">
+      {/* ─── ส่วน Hero: แนะนำแบรนด์และ Call to Action ─── */}
+      <section className="min-h-svh relative overflow-hidden bg-cream">
+        {/* ฝั่งขวา: รูปภาพ Hero และ Floating Card สำหรับ Desktop (Absolute Background) */}
+        <div className="absolute top-0 right-0 w-1/2 h-full hidden md:block animate-scale-in opacity-0 delay-100 z-0">
           <img
             src="https://images.unsplash.com/photo-1558769132-cb1aea458c5e?w=1200&q=85"
             alt="เมียงขนาด hero"
-            className="absolute inset-0 w-full h-full object-cover"
+            className="w-full h-full object-cover"
           />
           <div className="absolute inset-0 bg-gradient-to-r from-cream via-cream/30 to-transparent" />
 
-          {/* Floating Card: ดึงข้อมูลสินค้าจริงมาแสดงบางส่วน */}
-          <div className="animate-fade-in opacity-0 delay-600 absolute bottom-20 left-10
-                           bg-white px-6 py-5 shadow-[0_8px_40px_rgba(0,0,0,0.12)]">
-            <p className="text-[11px] text-muted tracking-[0.2em] mb-1">สินค้าแนะนำ</p>
-            {loading ? (
-              <div className="animate-pulse flex flex-col gap-2">
-                <div className="h-4 bg-cream-dark rounded w-32" />
-                <div className="h-3 bg-cream-dark rounded w-16" />
+          {/* Floating Card*/}
+          <Link
+            to={heroItem ? `/product/${heroItem.id}` : '#'}
+            className="animate-fade-in opacity-0 delay-600 absolute bottom-20 left-28
+                       bg-white/30 backdrop-blur-md px-6 py-5 
+                       shadow-[0_10px_40px_rgba(0,0,0,0.04)] group/hero-card
+                       transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_15px_50px_rgba(0,0,0,0.08)]
+                       no-underline cursor-pointer border-none"
+          >
+            <div className="flex flex-col">
+              <p className="text-[10px] text-muted tracking-[0.2em] mb-1.5 uppercase font-medium">
+                สินค้าแนะนำ
+              </p>
+              {loading ? (
+                <div className="animate-pulse flex flex-col gap-2">
+                  <div className="h-4 bg-black/5 rounded w-32" />
+                  <div className="h-3 bg-black/5 rounded w-16" />
+                </div>
+              ) : (
+                <>
+                  <p className="text-lg font-semibold text-charcoal leading-tight mb-1
+                                transition-colors duration-200 group-hover/hero-card:text-vermillion">
+                    {heroItem?.name ?? 'สะล้อพรีเมียม'}
+                  </p>
+                  <div className="flex items-center justify-between gap-4">
+                    <p className="text-[15px] font-normal text-vermillion">
+                      {heroItem ? formatPrice(heroItem.price) : '฿8,900'}
+                    </p>
+                    <span className="text-[10px] text-muted opacity-0 group-hover/hero-card:opacity-100 
+                                     transition-all duration-300 transform translate-x-[-10px] 
+                                     group-hover/hero-card:translate-x-0 font-light">
+                      ดูรายละเอียด →
+                    </span>
+                  </div>
+                </>
+              )}
+            </div>
+          </Link>
+        </div>
+
+        {/* Content Container: บังคับให้ข้อความอยู่ระยะเท่า Navbar (max-w-6xl mx-auto px-6) */}
+        <div className="max-w-6xl mx-auto px-6 h-full relative z-10">
+          <div className="grid grid-cols-1 md:grid-cols-2 h-full min-h-svh">
+            {/* ฝั่งซ้าย: ข้อความและปุ่มนำทาง */}
+            <div className="flex flex-col justify-end pt-40 pb-20">
+              <div className="animate-fade-in opacity-0 flex items-center gap-3 mb-8">
+                <span className="block w-8 h-px bg-gold" />
+                <span className="label-section">ล้านนา Minimal Luxury</span>
               </div>
-            ) : (
-              <>
-                <p className="text-lg font-semibold text-charcoal">
-                  {heroItem?.name ?? 'สะล้อพรีเมียม'}
-                </p>
-                <p className="text-sm text-vermillion mt-1">
-                  {heroItem ? formatPrice(heroItem.price) : '฿8,900'}
-                </p>
-              </>
-            )}
+
+              <h1 className="animate-slide-up opacity-0 delay-200 font-bold leading-[1.15] text-charcoal mb-7
+                              text-4xl sm:text-5xl lg:text-6xl xl:text-7xl tracking-tight">
+                งานฝีมือที่<br />
+                <span className="text-vermillion">ทนกาลเวลา</span>
+              </h1>
+
+              <p className="animate-fade-in opacity-0 delay-400 text-base font-light text-charcoal-light
+                             leading-[1.9] max-w-sm mb-12">
+                สินค้าหัตถกรรมล้านนาคัดสรรพิเศษ ทั้งเครื่องแต่งกายผ้าทอมือ
+                และเครื่องดนตรีพื้นเมืองฝีมือช่างชำนาญ
+              </p>
+
+              <div className="animate-fade-in opacity-0 delay-500 flex flex-wrap gap-4">
+                <button onClick={() => navigate('/products')} className="btn-primary">
+                  เลือกดูสินค้า
+                </button>
+                <a
+                  href={lineUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn-ghost"
+                >
+                  สอบถาม Line OA
+                </a>
+              </div>
+
+              {/* สถิติหรือจุดเด่นของแบรนด์ */}
+              <div className="animate-fade-in opacity-0 delay-600 flex gap-10 mt-16 pt-10 border-t border-black/10">
+                {[
+                  { num: '10+', label: 'ปีแห่งประสบการณ์' },
+                  { num: '50+', label: 'รายการสินค้า' },
+                  { num: '100%', label: 'งานฝีมือแท้' },
+                ].map((stat) => (
+                  <div key={stat.label}>
+                    <div className="text-2xl font-bold text-charcoal leading-none">{stat.num}</div>
+                    <div className="text-xs font-light text-muted mt-1 tracking-wide">{stat.label}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Spacer ฝั่งขวา (เพื่อให้ Grid ฝั่งซ้ายทำงานได้ถูกต้องบน Desktop) */}
+            <div className="hidden md:block pointer-events-none" />
           </div>
         </div>
 
@@ -196,12 +222,12 @@ export default function HomePage() {
           {loading
             ? Array.from({ length: 3 }).map((_, i) => <SkeletonCard key={i} />)
             : featured.map((item) => (
-                <ProductCard
-                  key={item.id}
-                  item={item}
-                  onSelect={(id) => navigate(`/product/${id}`)}
-                />
-              ))}
+              <ProductCard
+                key={item.id}
+                item={item}
+                onSelect={(id) => navigate(`/product/${id}`)}
+              />
+            ))}
         </div>
       </section>
 
