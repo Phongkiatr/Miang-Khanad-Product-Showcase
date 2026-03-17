@@ -38,50 +38,195 @@ export default function SettingsPanel() {
         <p className="text-sm text-muted font-light">จัดการข้อมูลการติดต่อและลิงก์โซเชียลของร้าน</p>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="flex flex-col gap-2">
-            <label className="text-[11px] tracking-[0.2em] uppercase text-muted font-normal">Line OA ID</label>
-            <input
-              type="text"
-              value={form.line_id}
-              onChange={(e) => setForm({ ...form, line_id: e.target.value })}
-              className="px-3 py-2 border border-black/15 bg-cream text-sm font-sans focus:outline-none focus:border-charcoal"
-              placeholder="@example"
-            />
+      <form onSubmit={handleSubmit} className="space-y-10">
+        {/* Contact & Links */}
+        <section>
+          <h3 className="text-xs font-bold tracking-[0.2em] uppercase text-gold mb-6 pb-2 border-b border-white/5">
+            ข้อมูลการติดต่อ & โซเชียล
+          </h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="flex flex-col gap-2">
+              <label className="text-[11px] tracking-[0.2em] uppercase text-muted font-normal">Line OA ID</label>
+              <input
+                type="text"
+                value={form.line_id}
+                onChange={(e) => setForm({ ...form, line_id: e.target.value })}
+                className="px-3 py-2 border border-black/15 bg-cream text-sm font-sans focus:outline-none focus:border-charcoal"
+                placeholder="@example"
+              />
+            </div>
+            <div className="flex flex-col gap-2">
+              <label className="text-[11px] tracking-[0.2em] uppercase text-muted font-normal">ที่อยู่ / พิกัด</label>
+              <input
+                type="text"
+                value={form.location}
+                onChange={(e) => setForm({ ...form, location: e.target.value })}
+                className="px-3 py-2 border border-black/15 bg-cream text-sm font-sans focus:outline-none focus:border-charcoal"
+              />
+            </div>
+            <div className="flex flex-col gap-2">
+              <label className="text-[11px] tracking-[0.2em] uppercase text-muted font-normal">Facebook URL</label>
+              <input
+                type="text"
+                value={form.facebook}
+                onChange={(e) => setForm({ ...form, facebook: e.target.value })}
+                className="px-3 py-2 border border-black/15 bg-cream text-sm font-sans focus:outline-none focus:border-charcoal"
+                placeholder="https://facebook.com/..."
+              />
+            </div>
+            <div className="flex flex-col gap-2">
+              <label className="text-[11px] tracking-[0.2em] uppercase text-muted font-normal">Instagram URL</label>
+              <input
+                type="text"
+                value={form.instagram}
+                onChange={(e) => setForm({ ...form, instagram: e.target.value })}
+                className="px-3 py-2 border border-black/15 bg-cream text-sm font-sans focus:outline-none focus:border-charcoal"
+                placeholder="https://instagram.com/..."
+              />
+            </div>
           </div>
-          <div className="flex flex-col gap-2">
-            <label className="text-[11px] tracking-[0.2em] uppercase text-muted font-normal">ที่อยู่ / พิกัด</label>
-            <input
-              type="text"
-              value={form.location}
-              onChange={(e) => setForm({ ...form, location: e.target.value })}
-              className="px-3 py-2 border border-black/15 bg-cream text-sm font-sans focus:outline-none focus:border-charcoal"
-            />
-          </div>
-          <div className="flex flex-col gap-2">
-            <label className="text-[11px] tracking-[0.2em] uppercase text-muted font-normal">Facebook URL</label>
-            <input
-              type="text"
-              value={form.facebook}
-              onChange={(e) => setForm({ ...form, facebook: e.target.value })}
-              className="px-3 py-2 border border-black/15 bg-cream text-sm font-sans focus:outline-none focus:border-charcoal"
-              placeholder="https://facebook.com/..."
-            />
-          </div>
-          <div className="flex flex-col gap-2">
-            <label className="text-[11px] tracking-[0.2em] uppercase text-muted font-normal">Instagram URL</label>
-            <input
-              type="text"
-              value={form.instagram}
-              onChange={(e) => setForm({ ...form, instagram: e.target.value })}
-              className="px-3 py-2 border border-black/15 bg-cream text-sm font-sans focus:outline-none focus:border-charcoal"
-              placeholder="https://instagram.com/..."
-            />
-          </div>
-        </div>
+        </section>
 
-        <div className="pt-4">
+        {/* Hero Section */}
+        <section>
+          <h3 className="text-xs font-bold tracking-[0.2em] uppercase text-gold mb-6 pb-2 border-b border-white/5">
+            ส่วน Hero (หน้าแรก)
+          </h3>
+          <div className="grid grid-cols-1 gap-6">
+            <div className="flex flex-col gap-2">
+              <label className="text-[11px] tracking-[0.2em] uppercase text-muted font-normal">Hero Label</label>
+              <input
+                type="text"
+                value={form.hero_label}
+                onChange={(e) => setForm({ ...form, hero_label: e.target.value })}
+                className="px-3 py-2 border border-black/15 bg-cream text-sm font-sans focus:outline-none focus:border-charcoal"
+              />
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="flex flex-col gap-2">
+                <label className="text-[11px] tracking-[0.2em] uppercase text-muted font-normal">Hero Title 1</label>
+                <input
+                  type="text"
+                  value={form.hero_title_1}
+                  onChange={(e) => setForm({ ...form, hero_title_1: e.target.value })}
+                  className="px-3 py-2 border border-black/15 bg-cream text-sm font-sans focus:outline-none focus:border-charcoal"
+                />
+              </div>
+              <div className="flex flex-col gap-2">
+                <label className="text-[11px] tracking-[0.2em] uppercase text-muted font-normal">Hero Title 2 (เน้นสี)</label>
+                <input
+                  type="text"
+                  value={form.hero_title_2}
+                  onChange={(e) => setForm({ ...form, hero_title_2: e.target.value })}
+                  className="px-3 py-2 border border-black/15 bg-cream text-sm font-sans focus:outline-none focus:border-charcoal"
+                />
+              </div>
+            </div>
+            <div className="flex flex-col gap-2">
+              <label className="text-[11px] tracking-[0.2em] uppercase text-muted font-normal">Hero Subtitle</label>
+              <textarea
+                value={form.hero_subtitle}
+                onChange={(e) => setForm({ ...form, hero_subtitle: e.target.value })}
+                rows={3}
+                className="px-3 py-2 border border-black/15 bg-cream text-sm font-sans focus:outline-none focus:border-charcoal resize-none"
+              />
+            </div>
+          </div>
+        </section>
+
+        {/* Brand Story */}
+        <section>
+          <h3 className="text-xs font-bold tracking-[0.2em] uppercase text-gold mb-6 pb-2 border-b border-white/5">
+            ส่วนเรื่องราว (Brand Story)
+          </h3>
+          <div className="grid grid-cols-1 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="flex flex-col gap-2">
+                <label className="text-[11px] tracking-[0.2em] uppercase text-muted font-normal">Title Part 1</label>
+                <input
+                  type="text"
+                  value={form.brand_story_title_1}
+                  onChange={(e) => setForm({ ...form, brand_story_title_1: e.target.value })}
+                  className="px-3 py-2 border border-black/15 bg-cream text-sm font-sans focus:outline-none focus:border-charcoal"
+                />
+              </div>
+              <div className="flex flex-col gap-2">
+                <label className="text-[11px] tracking-[0.2em] uppercase text-muted font-normal">Title Part 2 (ทอง)</label>
+                <input
+                  type="text"
+                  value={form.brand_story_title_2}
+                  onChange={(e) => setForm({ ...form, brand_story_title_2: e.target.value })}
+                  className="px-3 py-2 border border-black/15 bg-cream text-sm font-sans focus:outline-none focus:border-charcoal"
+                />
+              </div>
+            </div>
+            <div className="flex flex-col gap-2">
+              <label className="text-[11px] tracking-[0.2em] uppercase text-muted font-normal">คำบรรยาย 1</label>
+              <textarea
+                value={form.brand_story_desc_1}
+                onChange={(e) => setForm({ ...form, brand_story_desc_1: e.target.value })}
+                rows={3}
+                className="px-3 py-2 border border-black/15 bg-cream text-sm font-sans focus:outline-none focus:border-charcoal resize-none"
+              />
+            </div>
+            <div className="flex flex-col gap-2">
+              <label className="text-[11px] tracking-[0.2em] uppercase text-muted font-normal">คำบรรยาย 2</label>
+              <textarea
+                value={form.brand_story_desc_2}
+                onChange={(e) => setForm({ ...form, brand_story_desc_2: e.target.value })}
+                rows={3}
+                className="px-3 py-2 border border-black/15 bg-cream text-sm font-sans focus:outline-none focus:border-charcoal resize-none"
+              />
+            </div>
+          </div>
+        </section>
+
+        {/* Other Sections */}
+        <section>
+          <h3 className="text-xs font-bold tracking-[0.2em] uppercase text-gold mb-6 pb-2 border-b border-white/5">
+            ส่วนอื่น ๆ
+          </h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="flex flex-col gap-2">
+              <label className="text-[11px] tracking-[0.2em] uppercase text-muted font-normal">Featured Label</label>
+              <input
+                type="text"
+                value={form.featured_label}
+                onChange={(e) => setForm({ ...form, featured_label: e.target.value })}
+                className="px-3 py-2 border border-black/15 bg-cream text-sm font-sans focus:outline-none focus:border-charcoal"
+              />
+            </div>
+            <div className="flex flex-col gap-2">
+              <label className="text-[11px] tracking-[0.2em] uppercase text-muted font-normal">Featured Title</label>
+              <input
+                type="text"
+                value={form.featured_title}
+                onChange={(e) => setForm({ ...form, featured_title: e.target.value })}
+                className="px-3 py-2 border border-black/15 bg-cream text-sm font-sans focus:outline-none focus:border-charcoal"
+              />
+            </div>
+            <div className="flex flex-col gap-2 col-span-full">
+              <label className="text-[11px] tracking-[0.2em] uppercase text-muted font-normal">Contact Section Title</label>
+              <input
+                type="text"
+                value={form.contact_title}
+                onChange={(e) => setForm({ ...form, contact_title: e.target.value })}
+                className="px-3 py-2 border border-black/15 bg-cream text-sm font-sans focus:outline-none focus:border-charcoal"
+              />
+            </div>
+            <div className="flex flex-col gap-2 col-span-full">
+              <label className="text-[11px] tracking-[0.2em] uppercase text-muted font-normal">Contact Section Subtitle</label>
+              <input
+                type="text"
+                value={form.contact_subtitle}
+                onChange={(e) => setForm({ ...form, contact_subtitle: e.target.value })}
+                className="px-3 py-2 border border-black/15 bg-cream text-sm font-sans focus:outline-none focus:border-charcoal"
+              />
+            </div>
+          </div>
+        </section>
+
+        <div className="pt-4 pb-10">
           <button
             type="submit"
             disabled={saving}

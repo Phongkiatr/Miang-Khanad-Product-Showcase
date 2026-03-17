@@ -107,19 +107,18 @@ export default function HomePage() {
             <div className="flex flex-col justify-end pt-40 pb-20">
               <div className="animate-fade-in opacity-0 flex items-center gap-3 mb-8">
                 <span className="block w-8 h-px bg-gold" />
-                <span className="label-section">ล้านนา Minimal Luxury</span>
+                <span className="label-section">{settings.hero_label}</span>
               </div>
 
               <h1 className="animate-slide-up opacity-0 delay-200 font-bold leading-[1.15] text-charcoal mb-7
                               text-4xl sm:text-5xl lg:text-6xl xl:text-7xl tracking-tight">
-                งานฝีมือที่<br />
-                <span className="text-vermillion">ทนกาลเวลา</span>
+                {settings.hero_title_1}<br />
+                <span className="text-vermillion">{settings.hero_title_2}</span>
               </h1>
 
               <p className="animate-fade-in opacity-0 delay-400 text-base font-light text-charcoal-light
                              leading-[1.9] max-w-sm mb-12">
-                สินค้าหัตถกรรมล้านนาคัดสรรพิเศษ ทั้งเครื่องแต่งกายผ้าทอมือ
-                และเครื่องดนตรีพื้นเมืองฝีมือช่างชำนาญ
+                {settings.hero_subtitle}
               </p>
 
               <div className="animate-fade-in opacity-0 delay-500 flex flex-wrap gap-4">
@@ -165,7 +164,6 @@ export default function HomePage() {
           />
         </div>
 
-        {/* ตัวบอกใบ้การเลื่อนหน้า (Scroll Indicator) */}
         <div className="absolute bottom-10 left-0 right-0 flex flex-col items-center gap-2 z-30
                  animate-fade-in opacity-0 delay-600">
           <span className="text-[10px] tracking-[0.3em] text-muted uppercase">เลื่อนลง</span>
@@ -183,17 +181,14 @@ export default function HomePage() {
         <div className="max-w-3xl mx-auto text-center relative z-10">
           <div className="lanna-divider mb-12">✦</div>
           <h2 className="font-bold leading-[1.4] mb-8 tracking-wide text-3xl sm:text-4xl lg:text-5xl">
-            เรื่องราวของ<br />
-            <span className="text-gold">เมียงขนาด</span>
+            {settings.brand_story_title_1}<br />
+            <span className="text-gold">{settings.brand_story_title_2}</span>
           </h2>
           <p className="text-base font-light text-white/75 leading-loose mb-6">
-            "เมียงขนาด" มาจากภาษาล้านนาโบราณ หมายถึงขุมทรัพย์ที่ซ่อนอยู่ในความเรียบง่าย
-            เราเชื่อว่างานหัตถกรรมของช่างฝีมือภาคเหนือ คือสมบัติที่ควรได้รับการยกระดับและส่งต่อ
+            {settings.brand_story_desc_1}
           </p>
           <p className="text-base font-light text-white/75 leading-loose">
-            เราคัดเลือกผลิตภัณฑ์อย่างพิถีพิถัน ทั้งเสื้อผ้าทอมือจากกลุ่มแม่บ้าน
-            และเครื่องดนตรีจากช่างผู้สืบทอดภูมิปัญญา
-            ทุกชิ้นงานคือบทกวีเงียบๆ ที่เล่าเรื่องราวของดินแดนล้านนา
+            {settings.brand_story_desc_2}
           </p>
           <div className="lanna-divider mt-12">✦</div>
         </div>
@@ -203,9 +198,9 @@ export default function HomePage() {
       <section className="py-28 px-6 max-w-6xl mx-auto">
         <div className="flex justify-between items-end mb-16 flex-wrap gap-6">
           <div>
-            <p className="label-section mb-3">คอลเลกชันแนะนำ</p>
+            <p className="label-section mb-3">{settings.featured_label}</p>
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-charcoal leading-snug">
-              สินค้าเด่น
+              {settings.featured_title}
             </h2>
           </div>
           <Link
@@ -233,9 +228,9 @@ export default function HomePage() {
 
       {/* ─── ส่วนทิ้งท้าย: ช่องทางการติดต่อ LINE OA ─── */}
       <section className="bg-indigo-lanna py-20 px-6 text-center">
-        <p className="text-[12px] tracking-[0.3em] text-white/50 uppercase mb-5">พร้อมให้บริการ 7 วัน</p>
+        <p className="text-[12px] tracking-[0.3em] text-white/50 uppercase mb-5">{settings.contact_subtitle}</p>
         <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white mb-8">
-          มีคำถาม? เราพร้อมตอบทุกข้อสงสัย
+          {settings.contact_title}
         </h2>
         <a
           href={lineUrl}

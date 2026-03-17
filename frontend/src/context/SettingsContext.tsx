@@ -6,6 +6,22 @@ interface Settings {
   location: string;
   facebook?: string;
   instagram?: string;
+  // Hero Section
+  hero_label: string;
+  hero_title_1: string;
+  hero_title_2: string;
+  hero_subtitle: string;
+  // Brand Story
+  brand_story_title_1: string;
+  brand_story_title_2: string;
+  brand_story_desc_1: string;
+  brand_story_desc_2: string;
+  // Featured Products
+  featured_label: string;
+  featured_title: string;
+  // Contact Section
+  contact_title: string;
+  contact_subtitle: string;
   [key: string]: string | undefined;
 }
 
@@ -22,7 +38,19 @@ const DEFAULT_SETTINGS: Settings = {
   line_id: '@miang-khanad',
   location: 'เชียงใหม่, ประเทศไทย',
   facebook: '',
-  instagram: ''
+  instagram: '',
+  hero_label: 'ล้านนา Minimal Luxury',
+  hero_title_1: 'งานฝีมือที่',
+  hero_title_2: 'ทนกาลเวลา',
+  hero_subtitle: 'สินค้าหัตถกรรมล้านนาคัดสรรพิเศษ ทั้งเครื่องแต่งกายผ้าทอมือ และเครื่องดนตรีพื้นเมืองฝีมือช่างชำนาญ',
+  brand_story_title_1: 'เรื่องราวของ',
+  brand_story_title_2: 'เมียงขนาด',
+  brand_story_desc_1: '"เมียงขนาด" มาจากภาษาล้านนาโบราณ หมายถึงขุมทรัพย์ที่ซ่อนอยู่ในความเรียบง่าย เราเชื่อว่างานหัตถกรรมของช่างฝีมือภาคเหนือ คือสมบัติที่ควรได้รับการยกระดับและส่งต่อ',
+  brand_story_desc_2: 'เราคัดเลือกผลิตภัณฑ์อย่างพิถีพิถัน ทั้งเสื้อผ้าทอมือจากกลุ่มแม่บ้าน และเครื่องดนตรีจากช่างผู้สืบทอดภูมิปัญญา ทุกชิ้นงานคือบทกวีเงียบๆ ที่เล่าเรื่องราวของดินแดนล้านนา',
+  featured_label: 'คอลเลกชันแนะนำ',
+  featured_title: 'สินค้าเด่น',
+  contact_title: 'มีคำถาม? เราพร้อมตอบทุกข้อสงสัย',
+  contact_subtitle: 'พร้อมให้บริการ 7 วัน'
 };
 
 export const SettingsProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
