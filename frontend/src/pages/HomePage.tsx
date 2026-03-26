@@ -115,7 +115,7 @@ export default function HomePage() {
               </div>
 
               <h1 className="animate-slide-up opacity-0 delay-200 font-bold leading-[1.15] text-charcoal mb-7
-                              text-3xl sm:text-5xl lg:text-6xl xl:text-7xl tracking-tight">
+                              text-3xl sm:text-5xl lg:text-6xl xl:text-7xl tracking-wide">
                 {settingsLoading ? (
                   <span className="flex flex-col gap-3">
                     <span className="inline-block h-10 sm:h-14 w-3/4 bg-charcoal/10 rounded animate-pulse" />
