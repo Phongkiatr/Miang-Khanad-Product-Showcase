@@ -34,7 +34,7 @@ function SkeletonCard() {
 
 export default function HomePage() {
   const navigate = useNavigate();
-  const { settings } = useSettings();
+  const { settings, loading: settingsLoading } = useSettings();
   const lineUrl = `https://line.me/R/ti/p/${settings.line_id.startsWith('@') ? settings.line_id : `@${settings.line_id}`}`;
 
   // ดึงข้อมูลสินค้า 3 ชิ้นแรกจาก API เพื่อแสดงเป็นสินค้าแนะนำ (Featured)
@@ -107,19 +107,37 @@ export default function HomePage() {
             <div className="flex flex-col justify-end pt-40 pb-32 md:pb-20">
               <div className="animate-fade-in opacity-0 flex items-center gap-3 mb-8">
                 <span className="block w-8 h-px bg-gold" />
-                <span className="label-section">{settings.hero_label}</span>
+                {settingsLoading ? (
+                  <span className="inline-block h-3 w-32 bg-gold/20 rounded animate-pulse" />
+                ) : (
+                  <span className="label-section">{settings.hero_label}</span>
+                )}
               </div>
 
               <h1 className="animate-slide-up opacity-0 delay-200 font-bold leading-[1.15] text-charcoal mb-7
-                              text-4xl sm:text-5xl lg:text-6xl xl:text-7xl tracking-tight">
-                {settings.hero_title_1}<br />
-                <span className="text-vermillion">{settings.hero_title_2}</span>
+                              text-3xl sm:text-5xl lg:text-6xl xl:text-7xl tracking-tight">
+                {settingsLoading ? (
+                  <span className="flex flex-col gap-3">
+                    <span className="inline-block h-10 sm:h-14 w-3/4 bg-charcoal/10 rounded animate-pulse" />
+                    <span className="inline-block h-10 sm:h-14 w-2/3 bg-vermillion/10 rounded animate-pulse" />
+                  </span>
+                ) : (
+                  <>{settings.hero_title_1}<br /><span className="text-vermillion">{settings.hero_title_2}</span></>
+                )}
               </h1>
 
-              <p className="animate-fade-in opacity-0 delay-400 text-base font-light text-charcoal-light
-                             leading-[1.9] max-w-sm mb-12">
-                {settings.hero_subtitle}
-              </p>
+              {settingsLoading ? (
+                <div className="animate-fade-in opacity-0 delay-400 flex flex-col gap-2 max-w-sm mb-12">
+                  <span className="h-4 w-full bg-charcoal/5 rounded animate-pulse" />
+                  <span className="h-4 w-5/6 bg-charcoal/5 rounded animate-pulse" />
+                  <span className="h-4 w-2/3 bg-charcoal/5 rounded animate-pulse" />
+                </div>
+              ) : (
+                <p className="animate-fade-in opacity-0 delay-400 text-base font-light text-charcoal-light
+                               leading-[1.9] max-w-sm mb-12">
+                  {settings.hero_subtitle}
+                </p>
+              )}
 
               <div className="animate-fade-in opacity-0 delay-500 flex flex-wrap gap-4">
                 <button onClick={() => navigate('/products')} className="btn-primary">
@@ -180,16 +198,30 @@ export default function HomePage() {
         </div>
         <div className="max-w-3xl mx-auto text-center relative z-10">
           <div className="lanna-divider mb-12">✦</div>
-          <h2 className="font-bold leading-[1.4] mb-8 tracking-wide text-3xl sm:text-4xl lg:text-5xl">
-            {settings.brand_story_title_1}<br />
-            <span className="text-gold">{settings.brand_story_title_2}</span>
-          </h2>
-          <p className="text-base font-light text-white/75 leading-loose mb-6">
-            {settings.brand_story_desc_1}
-          </p>
-          <p className="text-base font-light text-white/75 leading-loose">
-            {settings.brand_story_desc_2}
-          </p>
+          {settingsLoading ? (
+            <div className="flex flex-col items-center gap-4 animate-pulse">
+              <div className="h-9 sm:h-12 w-2/3 bg-white/10 rounded" />
+              <div className="h-9 sm:h-12 w-1/2 bg-gold/10 rounded" />
+              <div className="h-4 w-full bg-white/5 rounded mt-4" />
+              <div className="h-4 w-5/6 bg-white/5 rounded" />
+              <div className="h-4 w-4/5 bg-white/5 rounded" />
+              <div className="h-4 w-full bg-white/5 rounded mt-2" />
+              <div className="h-4 w-3/4 bg-white/5 rounded" />
+            </div>
+          ) : (
+            <>
+              <h2 className="font-bold leading-[1.4] mb-8 tracking-wide text-2xl sm:text-4xl lg:text-5xl">
+                {settings.brand_story_title_1}<br />
+                <span className="text-gold">{settings.brand_story_title_2}</span>
+              </h2>
+              <p className="text-base font-light text-white/75 leading-loose mb-6">
+                {settings.brand_story_desc_1}
+              </p>
+              <p className="text-base font-light text-white/75 leading-loose">
+                {settings.brand_story_desc_2}
+              </p>
+            </>
+          )}
           <div className="lanna-divider mt-12">✦</div>
         </div>
       </section>
@@ -198,10 +230,19 @@ export default function HomePage() {
       <section className="py-28 px-6 max-w-6xl mx-auto">
         <div className="flex justify-between items-end mb-16 flex-wrap gap-6">
           <div>
-            <p className="label-section mb-3">{settings.featured_label}</p>
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-charcoal leading-snug">
-              {settings.featured_title}
-            </h2>
+            {settingsLoading ? (
+              <div className="animate-pulse flex flex-col gap-2">
+                <div className="h-3 w-24 bg-gold/20 rounded" />
+                <div className="h-8 sm:h-10 w-40 bg-charcoal/10 rounded" />
+              </div>
+            ) : (
+              <>
+                <p className="label-section mb-3">{settings.featured_label}</p>
+                <h2 className="text-2xl sm:text-4xl lg:text-5xl font-bold text-charcoal leading-snug">
+                  {settings.featured_title}
+                </h2>
+              </>
+            )}
           </div>
           <Link
             to="/products"
@@ -228,10 +269,19 @@ export default function HomePage() {
 
       {/* ─── ส่วนทิ้งท้าย: ช่องทางการติดต่อ LINE OA ─── */}
       <section className="bg-indigo-lanna py-20 px-6 text-center">
-        <p className="text-[12px] tracking-[0.3em] text-white/50 uppercase mb-5">{settings.contact_subtitle}</p>
-        <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white mb-8">
-          {settings.contact_title}
-        </h2>
+        {settingsLoading ? (
+          <div className="animate-pulse flex flex-col items-center gap-3 mb-8">
+            <div className="h-3 w-28 bg-white/10 rounded" />
+            <div className="h-8 sm:h-10 w-64 bg-white/10 rounded" />
+          </div>
+        ) : (
+          <>
+            <p className="text-[12px] tracking-[0.3em] text-white/50 uppercase mb-5">{settings.contact_subtitle}</p>
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white mb-8">
+              {settings.contact_title}
+            </h2>
+          </>
+        )}
         <a
           href={lineUrl}
           target="_blank"

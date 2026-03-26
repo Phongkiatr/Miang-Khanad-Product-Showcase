@@ -33,7 +33,7 @@ const MapPinIcon = () => (
  */
 
 export default function Footer() {
-  const { settings } = useSettings();
+  const { settings, loading: settingsLoading } = useSettings();
   const lineUrl = `https://line.me/R/ti/p/${settings.line_id.startsWith('@') ? settings.line_id : `@${settings.line_id}`}`;
 
   return (
@@ -73,46 +73,53 @@ export default function Footer() {
           {/* ข้อมูลการติดต่อและที่อยู่ (Contact Info) */}
           <div>
             <h4 className="text-[12px] tracking-[0.25em] uppercase text-gold font-normal mb-5">ติดต่อ</h4>
-            <div className="flex flex-col gap-3">
-              <a
-                href={lineUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-2.5 text-sm font-light text-white/60
-                           no-underline transition-colors duration-200 hover:text-[#06C755]"
-              >
-                <LineIcon />
-                Line OA: {settings.line_id}
-              </a>
-              {settings.facebook && (
-                <a
-                  href={settings.facebook}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-2.5 text-sm font-light text-white/60
-                             no-underline transition-colors duration-200 hover:text-white"
-                >
-                  <FacebookIcon />
-                  Facebook
-                </a>
-              )}
-              {settings.instagram && (
-                <a
-                  href={settings.instagram}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-2.5 text-sm font-light text-white/60
-                             no-underline transition-colors duration-200 hover:text-white"
-                >
-                  <InstagramIcon />
-                  Instagram
-                </a>
-              )}
-              <div className="flex items-center gap-2.5 text-sm font-light text-white/60">
-                <MapPinIcon />
-                <span>{settings.location}</span>
+            {settingsLoading ? (
+              <div className="flex flex-col gap-3 animate-pulse">
+                <div className="h-4 w-40 bg-white/10 rounded" />
+                <div className="h-4 w-32 bg-white/10 rounded" />
               </div>
-            </div>
+            ) : (
+              <div className="flex flex-col gap-3">
+                <a
+                  href={lineUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2.5 text-sm font-light text-white/60
+                             no-underline transition-colors duration-200 hover:text-[#06C755]"
+                >
+                  <LineIcon />
+                  Line OA: {settings.line_id}
+                </a>
+                {settings.facebook && (
+                  <a
+                    href={settings.facebook}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-2.5 text-sm font-light text-white/60
+                               no-underline transition-colors duration-200 hover:text-white"
+                  >
+                    <FacebookIcon />
+                    Facebook
+                  </a>
+                )}
+                {settings.instagram && (
+                  <a
+                    href={settings.instagram}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-2.5 text-sm font-light text-white/60
+                               no-underline transition-colors duration-200 hover:text-white"
+                  >
+                    <InstagramIcon />
+                    Instagram
+                  </a>
+                )}
+                <div className="flex items-center gap-2.5 text-sm font-light text-white/60">
+                  <MapPinIcon />
+                  <span>{settings.location}</span>
+                </div>
+              </div>
+            )}
           </div>
         </div>
 
