@@ -117,7 +117,7 @@ export default function Footer() {
         </div>
 
         {/* แถบล่างสุด: ลิขสิทธิ์และสโลแกน (Bottom Bar) */}
-        <div className="border-t border-white/10 pt-8 flex flex-wrap justify-between items-center gap-4">
+        <div className="border-t border-white/10 pt-8 flex flex-col sm:flex-row items-center sm:justify-between gap-3 sm:gap-4 text-center sm:text-left">
           <p className="text-[13px] font-light text-white/35">
             © 2025 เมียงขนาด. สงวนลิขสิทธิ์
           </p>

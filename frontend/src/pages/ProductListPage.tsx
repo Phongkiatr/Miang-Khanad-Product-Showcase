@@ -75,7 +75,7 @@ export default function ProductListPage() {
         </h1>
 
         {/* แถบเครื่องมือ: กรองตามหมวดหมู่ / ค้นหา / เรียงราคา */}
-        <div className="animate-fade-in opacity-0 delay-200 flex flex-wrap justify-between items-center
+        <div className="animate-fade-in opacity-0 delay-200 flex flex-col sm:flex-row sm:flex-wrap justify-between items-start sm:items-center
                          gap-5 pb-8 border-b border-black/10 mb-14">
           <div className="flex flex-wrap gap-2 items-center">
             {/* ปุ่มแสดงสินค้าทั้งหมด */}
@@ -104,7 +104,7 @@ export default function ProductListPage() {
             ))}
           </div>
 
-          <div className="flex items-center gap-3 flex-wrap">
+          <div className="flex items-center gap-3 w-full sm:w-auto">
             {/* กล่องค้นหาตามชื่อสินค้า */}
             <input
               type="text"
@@ -113,7 +113,7 @@ export default function ProductListPage() {
               placeholder="ค้นหาสินค้า..."
               className="px-3 py-2 border border-black/10 bg-cream text-[13px] text-charcoal
                           focus:outline-none focus:border-charcoal font-sans placeholder:text-muted
-                          w-40 sm:w-52"
+                          flex-1 min-w-0 sm:w-52 sm:flex-none"
             />
 
             {/* เมนูเลือกการเรียงลำดับราคาสินค้า */}

@@ -104,7 +104,7 @@ export default function HomePage() {
         <div className="max-w-6xl mx-auto px-6 h-full relative z-10">
           <div className="grid grid-cols-1 md:grid-cols-2 h-full min-h-svh">
             {/* ฝั่งซ้าย: ข้อความและปุ่มนำทาง */}
-            <div className="flex flex-col justify-end pt-40 pb-20">
+            <div className="flex flex-col justify-end pt-40 pb-32 md:pb-20">
               <div className="animate-fade-in opacity-0 flex items-center gap-3 mb-8">
                 <span className="block w-8 h-px bg-gold" />
                 <span className="label-section">{settings.hero_label}</span>
@@ -136,15 +136,15 @@ export default function HomePage() {
               </div>
 
               {/* สถิติหรือจุดเด่นของแบรนด์ */}
-              <div className="animate-fade-in opacity-0 delay-600 flex gap-10 mt-16 pt-10 border-t border-black/10">
+              <div className="animate-fade-in opacity-0 delay-600 grid grid-cols-3 gap-4 sm:gap-10 mt-16 pt-10 border-t border-black/10">
                 {[
                   { num: '10+', label: 'ปีแห่งประสบการณ์' },
                   { num: '50+', label: 'รายการสินค้า' },
                   { num: '100%', label: 'งานฝีมือแท้' },
                 ].map((stat) => (
                   <div key={stat.label}>
-                    <div className="text-2xl font-bold text-charcoal leading-none">{stat.num}</div>
-                    <div className="text-xs font-light text-muted mt-1 tracking-wide">{stat.label}</div>
+                    <div className="text-xl sm:text-2xl font-bold text-charcoal leading-none">{stat.num}</div>
+                    <div className="text-[10px] sm:text-xs font-light text-muted mt-1 tracking-wide">{stat.label}</div>
                   </div>
                 ))}
               </div>
@@ -164,7 +164,7 @@ export default function HomePage() {
           />
         </div>
 
-        <div className="absolute bottom-10 left-0 right-0 flex flex-col items-center gap-2 z-30
+        <div className="absolute bottom-10 left-0 right-0 hidden lg:flex flex-col items-center gap-2 z-30
                  animate-fade-in opacity-0 delay-600">
           <span className="text-[10px] tracking-[0.3em] text-muted uppercase">เลื่อนลง</span>
           <div className="w-px h-12 bg-gradient-to-b from-muted to-transparent animate-[scrollPulse_2s_ease_infinite]" />

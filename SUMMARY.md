@@ -68,15 +68,22 @@
 - **Strict Naming Validation**:
     - รองรับการตั้งชื่อรูปภาพก่อนอัปโหลด โดยจำกัดให้ใช้เฉพาะภาษาอังกฤษ, ตัวเลข, `_` และ `-` เท่านั้น (ห้ามมีเว้นวรรค)
     - มีระบบตรวจสอบทั้งฝั่ง Frontend และ Backend พร้อมระบบ Sanitize ชื่อไฟล์เพื่อป้องกันความผิดพลาดจาก Supabase
-- **Robustness Fixes**: 
+- **Robustness Fixes**:
     - แก้ไขปัญหาการอ่านค่า JSON ผิดพลาด (204 No Content) เมื่อทำการลบข้อมูล
     - จัดการปัญหาการตั้งชื่อไฟล์ภาษาไทยที่ทำให้เกิด Error "Invalid key"
 
-## 13. สถานะปัจจุบัน (Current Status)
+## 13. การปรับปรุง Responsive Design สำหรับมือถือ (Mobile Responsive Fixes)
+- **Hero Stats Grid**: เปลี่ยนจาก `flex` เป็น `grid grid-cols-3` เพื่อป้องกันตัวเลขสถิติ (10+, 50+, 100%) ซ้อนทับกันบนหน้าจอมือถือ พร้อมลดขนาดตัวอักษรบน mobile
+- **Scroll Indicator**: ซ่อนตัวบอก "เลื่อนลง" บน mobile (`hidden md:flex`) เพื่อป้องกันการซ้อนทับกับ stats section
+- **Product Filter Toolbar**: เปลี่ยน layout ของ filter/search/sort ให้ stack แนวตั้งบน mobile (`flex-col sm:flex-row`) พร้อมให้ช่องค้นหาขยายเต็มจอ
+- **Footer Copyright Bar**: จัดให้ข้อความลิขสิทธิ์และสโลแกน stack แนวตั้งพร้อมจัดกลางบน mobile (`flex-col sm:flex-row items-center`)
+
+## 14. สถานะปัจจุบัน (Current Status)
 - ✅ ระบบจัดการรูปภาพ (Media Management) พร้อมใช้งานอย่างสมบูรณ์ในหน้า Admin
 - ✅ รองรับการอัปโหลดพร้อมตั้งชื่อ (English only), ลบ (พร้อมระบบยืนยัน) และคัดลอก URL
 - ✅ ระบบไอคอนมาตรฐาน (LineIcons) ถูกนำไปใช้ทั่วทั้งระบบ Admin
 - ✅ ระบบจัดการความผิดพลาด (Error Handling) สำหรับการอัปโหลดขนาดใหญ่และชื่อไฟล์พิเศษทำงานครบถ้วน
+- ✅ Responsive Design ปรับปรุงให้รองรับหน้าจอมือถือ (375px+) ทุกหน้าไม่มีการซ้อนทับ
 
 ---
 *บันทึกโดย Antigravity (AI Coding Assistant)*
