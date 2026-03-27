@@ -114,15 +114,18 @@ export default function HomePage() {
                 )}
               </div>
 
-              <h1 className="animate-slide-up opacity-0 delay-200 font-bold leading-[1.15] text-charcoal mb-7
-                              text-3xl sm:text-5xl lg:text-6xl xl:text-7xl tracking-wide">
+              <h1 className="animate-slide-up opacity-0 delay-200 font-bold text-charcoal mb-7
+                              text-3xl sm:text-5xl lg:text-6xl xl:text-7xl tracking-wide flex flex-col gap-1 sm:gap-3">
                 {settingsLoading ? (
-                  <span className="flex flex-col gap-3">
+                  <>
                     <span className="inline-block h-10 sm:h-14 w-3/4 bg-charcoal/10 rounded animate-pulse" />
                     <span className="inline-block h-10 sm:h-14 w-2/3 bg-vermillion/10 rounded animate-pulse" />
-                  </span>
+                  </>
                 ) : (
-                  <>{settings.hero_title_1}<br /><span className="text-vermillion">{settings.hero_title_2}</span></>
+                  <>
+                    <span className="leading-[1.2]">{settings.hero_title_1}</span>
+                    <span className="text-vermillion leading-[1.2]">{settings.hero_title_2}</span>
+                  </>
                 )}
               </h1>
 
@@ -210,8 +213,8 @@ export default function HomePage() {
             </div>
           ) : (
             <>
-              <h2 className="font-bold leading-[1.4] mb-8 tracking-wide text-2xl sm:text-4xl lg:text-5xl">
-                {settings.brand_story_title_1}<br />
+              <h2 className="font-bold leading-[1.4] mb-8 tracking-wide text-2xl sm:text-4xl lg:text-5xl flex flex-col gap-2 sm:gap-3">
+                <span>{settings.brand_story_title_1}</span>
                 <span className="text-gold">{settings.brand_story_title_2}</span>
               </h2>
               <p className="text-base font-light text-white/75 leading-loose mb-6">
