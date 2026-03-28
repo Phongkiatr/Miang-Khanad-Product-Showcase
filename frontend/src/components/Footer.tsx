@@ -1,4 +1,5 @@
 import { useSettings } from '../context/SettingsContext';
+import { Link } from 'react-router-dom';
 
 const LineIcon = () => (
   <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
@@ -80,11 +81,14 @@ export default function Footer() {
                 <h4 className="text-[12px] tracking-[0.25em] uppercase text-gold font-normal mb-5">{settings.footer_product_heading}</h4>
                 <ul className="flex flex-col gap-3">
                   {settings.footer_product_list.split(',').map((item) => item.trim()).filter(Boolean).map((item) => (
-                    <li
-                      key={item}
-                      className="text-sm font-light text-white/60 cursor-pointer hover:text-white transition-colors duration-200"
-                    >
-                      {item}
+                    <li key={item}>
+                      <Link
+                        to="/products"
+                        onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+                        className="text-sm font-light text-white/60 cursor-pointer hover:text-white transition-colors duration-200 no-underline"
+                      >
+                        {item}
+                      </Link>
                     </li>
                   ))}
                 </ul>
