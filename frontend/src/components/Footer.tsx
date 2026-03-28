@@ -45,34 +45,56 @@ export default function Footer() {
 
           {/* ข้อมูลแบรนด์และปรัชญา (Brand Identity) */}
           <div>
-            <div className="mb-4">
-              <div className="text-2xl font-bold tracking-wide mb-1">เมียงขนาด</div>
-              <div className="text-[10px] text-gold tracking-[0.3em] uppercase font-light">MIANG KHANAD</div>
-            </div>
-            <p className="text-sm font-light text-white/60 leading-loose max-w-[260px]">
-              ยกระดับงานหัตถกรรมล้านนาสู่ Minimal Luxury
-              <br />ด้วยคุณภาพที่ไม่ประนีประนอม
-            </p>
+            {settingsLoading ? (
+              <div className="flex flex-col gap-3 animate-pulse">
+                <div className="h-8 w-32 bg-white/10 rounded mb-2" />
+                <div className="h-4 w-48 bg-white/5 rounded" />
+                <div className="h-4 w-40 bg-white/5 rounded" />
+              </div>
+            ) : (
+              <>
+                <div className="mb-4">
+                  <div className="text-2xl font-bold tracking-wide mb-1">{settings.footer_brand_name}</div>
+                  <div className="text-[10px] text-gold tracking-[0.3em] uppercase font-light">{settings.footer_brand_name_en}</div>
+                </div>
+                <p className="text-sm font-light text-white/60 leading-loose max-w-[260px]">
+                  {settings.footer_brand_desc.split('\n').map((line, i) => (
+                    <span key={i}>{i > 0 && <br />}{line}</span>
+                  ))}
+                </p>
+              </>
+            )}
           </div>
 
           {/* รายการหมวดหมู่สินค้าหลัก (Quick Links) */}
           <div>
-            <h4 className="text-[12px] tracking-[0.25em] uppercase text-gold font-normal mb-5">สินค้า</h4>
-            <ul className="flex flex-col gap-3">
-              {['เครื่องแต่งกาย', 'เครื่องดนตรีพื้นเมือง', 'คอลเลกชันใหม่'].map((item) => (
-                <li
-                  key={item}
-                  className="text-sm font-light text-white/60 cursor-pointer hover:text-white transition-colors duration-200"
-                >
-                  {item}
-                </li>
-              ))}
-            </ul>
+            {settingsLoading ? (
+              <div className="flex flex-col gap-4 animate-pulse">
+                <div className="h-4 w-16 bg-gold/20 rounded mb-2" />
+                <div className="h-4 w-24 bg-white/5 rounded" />
+                <div className="h-4 w-32 bg-white/5 rounded" />
+                <div className="h-4 w-28 bg-white/5 rounded" />
+              </div>
+            ) : (
+              <>
+                <h4 className="text-[12px] tracking-[0.25em] uppercase text-gold font-normal mb-5">{settings.footer_product_heading}</h4>
+                <ul className="flex flex-col gap-3">
+                  {settings.footer_product_list.split(',').map((item) => item.trim()).filter(Boolean).map((item) => (
+                    <li
+                      key={item}
+                      className="text-sm font-light text-white/60 cursor-pointer hover:text-white transition-colors duration-200"
+                    >
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+              </>
+            )}
           </div>
 
           {/* ข้อมูลการติดต่อและที่อยู่ (Contact Info) */}
           <div>
-            <h4 className="text-[12px] tracking-[0.25em] uppercase text-gold font-normal mb-5">ติดต่อ</h4>
+            <h4 className="text-[12px] tracking-[0.25em] uppercase text-gold font-normal mb-5">{settings.footer_contact_heading}</h4>
             {settingsLoading ? (
               <div className="flex flex-col gap-3 animate-pulse">
                 <div className="h-4 w-40 bg-white/10 rounded" />
@@ -125,12 +147,21 @@ export default function Footer() {
 
         {/* แถบล่างสุด: ลิขสิทธิ์และสโลแกน (Bottom Bar) */}
         <div className="border-t border-white/10 pt-8 flex flex-col sm:flex-row items-center sm:justify-between gap-3 sm:gap-4 text-center sm:text-left">
-          <p className="text-[13px] font-light text-white/35">
-            © 2025 เมียงขนาด. สงวนลิขสิทธิ์
-          </p>
-          <p className="text-[11px] text-gold tracking-[0.2em] uppercase font-light">
-            ลำดับแห่งล้านนา — crafted with love
-          </p>
+          {settingsLoading ? (
+            <>
+              <div className="h-4 w-48 bg-white/5 rounded animate-pulse" />
+              <div className="h-3 w-40 bg-gold/10 rounded animate-pulse" />
+            </>
+          ) : (
+            <>
+              <p className="text-[13px] font-light text-white/35">
+                {settings.footer_copyright}
+              </p>
+              <p className="text-[11px] text-gold tracking-[0.2em] uppercase font-light">
+                {settings.footer_slogan}
+              </p>
+            </>
+          )}
         </div>
       </div>
     </footer>

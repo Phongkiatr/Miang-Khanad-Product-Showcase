@@ -22,6 +22,22 @@ interface Settings {
   // Contact Section
   contact_title: string;
   contact_subtitle: string;
+  // Hero Stats
+  stat_num_1: string;
+  stat_label_1: string;
+  stat_num_2: string;
+  stat_label_2: string;
+  stat_num_3: string;
+  stat_label_3: string;
+  // Footer
+  footer_brand_name: string;
+  footer_brand_name_en: string;
+  footer_brand_desc: string;
+  footer_product_heading: string;
+  footer_product_list: string;
+  footer_contact_heading: string;
+  footer_copyright: string;
+  footer_slogan: string;
   [key: string]: string | undefined;
 }
 
@@ -50,7 +66,23 @@ const DEFAULT_SETTINGS: Settings = {
   featured_label: 'คอลเลกชันแนะนำ',
   featured_title: 'สินค้าเด่น',
   contact_title: 'มีคำถาม? เราพร้อมตอบทุกข้อสงสัย',
-  contact_subtitle: 'พร้อมให้บริการ 7 วัน'
+  contact_subtitle: 'พร้อมให้บริการ 7 วัน',
+  // Hero Stats
+  stat_num_1: '10+',
+  stat_label_1: 'ปีแห่งประสบการณ์',
+  stat_num_2: '50+',
+  stat_label_2: 'รายการสินค้า',
+  stat_num_3: '100%',
+  stat_label_3: 'งานฝีมือแท้',
+  // Footer
+  footer_brand_name: 'เมียงขนาด',
+  footer_brand_name_en: 'MIANG KHANAD',
+  footer_brand_desc: 'ยกระดับงานหัตถกรรมล้านนาสู่ Minimal Luxury\nด้วยคุณภาพที่ไม่ประนีประนอม',
+  footer_product_heading: 'สินค้า',
+  footer_product_list: 'เครื่องแต่งกาย, เครื่องดนตรีพื้นเมือง, คอลเลกชันใหม่',
+  footer_contact_heading: 'ติดต่อ',
+  footer_copyright: '© 2025 เมียงขนาด. สงวนลิขสิทธิ์',
+  footer_slogan: 'ลำดับแห่งล้านนา — crafted with love'
 };
 
 export const SettingsProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {

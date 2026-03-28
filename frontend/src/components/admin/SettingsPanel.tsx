@@ -226,6 +226,95 @@ export default function SettingsPanel() {
           </div>
         </section>
 
+        {/* Hero Stats */}
+        <section>
+          <h3 className="text-xs font-bold tracking-[0.2em] uppercase text-gold mb-6 pb-2 border-b border-white/5">
+            สถิติ Hero (Stats)
+          </h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="flex flex-col gap-2">
+              <label className="text-[11px] tracking-[0.2em] uppercase text-muted font-normal">ตัวเลข 1</label>
+              <input type="text" value={form.stat_num_1} onChange={(e) => setForm({ ...form, stat_num_1: e.target.value })}
+                className="px-3 py-2 border border-black/15 bg-cream text-sm font-sans focus:outline-none focus:border-charcoal" />
+            </div>
+            <div className="flex flex-col gap-2">
+              <label className="text-[11px] tracking-[0.2em] uppercase text-muted font-normal">คำอธิบาย 1</label>
+              <input type="text" value={form.stat_label_1} onChange={(e) => setForm({ ...form, stat_label_1: e.target.value })}
+                className="px-3 py-2 border border-black/15 bg-cream text-sm font-sans focus:outline-none focus:border-charcoal" />
+            </div>
+            <div className="flex flex-col gap-2">
+              <label className="text-[11px] tracking-[0.2em] uppercase text-muted font-normal">ตัวเลข 2</label>
+              <input type="text" value={form.stat_num_2} onChange={(e) => setForm({ ...form, stat_num_2: e.target.value })}
+                className="px-3 py-2 border border-black/15 bg-cream text-sm font-sans focus:outline-none focus:border-charcoal" />
+            </div>
+            <div className="flex flex-col gap-2">
+              <label className="text-[11px] tracking-[0.2em] uppercase text-muted font-normal">คำอธิบาย 2</label>
+              <input type="text" value={form.stat_label_2} onChange={(e) => setForm({ ...form, stat_label_2: e.target.value })}
+                className="px-3 py-2 border border-black/15 bg-cream text-sm font-sans focus:outline-none focus:border-charcoal" />
+            </div>
+            <div className="flex flex-col gap-2">
+              <label className="text-[11px] tracking-[0.2em] uppercase text-muted font-normal">ตัวเลข 3</label>
+              <input type="text" value={form.stat_num_3} onChange={(e) => setForm({ ...form, stat_num_3: e.target.value })}
+                className="px-3 py-2 border border-black/15 bg-cream text-sm font-sans focus:outline-none focus:border-charcoal" />
+            </div>
+            <div className="flex flex-col gap-2">
+              <label className="text-[11px] tracking-[0.2em] uppercase text-muted font-normal">คำอธิบาย 3</label>
+              <input type="text" value={form.stat_label_3} onChange={(e) => setForm({ ...form, stat_label_3: e.target.value })}
+                className="px-3 py-2 border border-black/15 bg-cream text-sm font-sans focus:outline-none focus:border-charcoal" />
+            </div>
+          </div>
+        </section>
+
+        {/* Footer */}
+        <section>
+          <h3 className="text-xs font-bold tracking-[0.2em] uppercase text-gold mb-6 pb-2 border-b border-white/5">
+            ส่วนท้าย (Footer)
+          </h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="flex flex-col gap-2">
+              <label className="text-[11px] tracking-[0.2em] uppercase text-muted font-normal">ชื่อแบรนด์ (ไทย)</label>
+              <input type="text" value={form.footer_brand_name} onChange={(e) => setForm({ ...form, footer_brand_name: e.target.value })}
+                className="px-3 py-2 border border-black/15 bg-cream text-sm font-sans focus:outline-none focus:border-charcoal" />
+            </div>
+            <div className="flex flex-col gap-2">
+              <label className="text-[11px] tracking-[0.2em] uppercase text-muted font-normal">ชื่อแบรนด์ (EN)</label>
+              <input type="text" value={form.footer_brand_name_en} onChange={(e) => setForm({ ...form, footer_brand_name_en: e.target.value })}
+                className="px-3 py-2 border border-black/15 bg-cream text-sm font-sans focus:outline-none focus:border-charcoal" />
+            </div>
+            <div className="flex flex-col gap-2 col-span-full">
+              <label className="text-[11px] tracking-[0.2em] uppercase text-muted font-normal">คำอธิบายแบรนด์ (ขึ้นบรรทัดใหม่ด้วย \n)</label>
+              <textarea value={form.footer_brand_desc} onChange={(e) => setForm({ ...form, footer_brand_desc: e.target.value })}
+                rows={2} className="px-3 py-2 border border-black/15 bg-cream text-sm font-sans focus:outline-none focus:border-charcoal resize-none" />
+            </div>
+            <div className="flex flex-col gap-2">
+              <label className="text-[11px] tracking-[0.2em] uppercase text-muted font-normal">หัวข้อสินค้า</label>
+              <input type="text" value={form.footer_product_heading} onChange={(e) => setForm({ ...form, footer_product_heading: e.target.value })}
+                className="px-3 py-2 border border-black/15 bg-cream text-sm font-sans focus:outline-none focus:border-charcoal" />
+            </div>
+            <div className="flex flex-col gap-2">
+              <label className="text-[11px] tracking-[0.2em] uppercase text-muted font-normal">หัวข้อติดต่อ</label>
+              <input type="text" value={form.footer_contact_heading} onChange={(e) => setForm({ ...form, footer_contact_heading: e.target.value })}
+                className="px-3 py-2 border border-black/15 bg-cream text-sm font-sans focus:outline-none focus:border-charcoal" />
+            </div>
+            <div className="flex flex-col gap-2 col-span-full">
+              <label className="text-[11px] tracking-[0.2em] uppercase text-muted font-normal">รายการสินค้า (คั่นด้วย ,)</label>
+              <input type="text" value={form.footer_product_list} onChange={(e) => setForm({ ...form, footer_product_list: e.target.value })}
+                className="px-3 py-2 border border-black/15 bg-cream text-sm font-sans focus:outline-none focus:border-charcoal"
+                placeholder="เครื่องแต่งกาย, เครื่องดนตรีพื้นเมือง, คอลเลกชันใหม่" />
+            </div>
+            <div className="flex flex-col gap-2 col-span-full">
+              <label className="text-[11px] tracking-[0.2em] uppercase text-muted font-normal">Copyright</label>
+              <input type="text" value={form.footer_copyright} onChange={(e) => setForm({ ...form, footer_copyright: e.target.value })}
+                className="px-3 py-2 border border-black/15 bg-cream text-sm font-sans focus:outline-none focus:border-charcoal" />
+            </div>
+            <div className="flex flex-col gap-2 col-span-full">
+              <label className="text-[11px] tracking-[0.2em] uppercase text-muted font-normal">สโลแกน</label>
+              <input type="text" value={form.footer_slogan} onChange={(e) => setForm({ ...form, footer_slogan: e.target.value })}
+                className="px-3 py-2 border border-black/15 bg-cream text-sm font-sans focus:outline-none focus:border-charcoal" />
+            </div>
+          </div>
+        </section>
+
         <div className="pt-4 pb-10">
           <button
             type="submit"

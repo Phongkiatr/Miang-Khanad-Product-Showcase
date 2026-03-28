@@ -78,12 +78,25 @@
 - **Product Filter Toolbar**: เปลี่ยน layout ของ filter/search/sort ให้ stack แนวตั้งบน mobile (`flex-col sm:flex-row`) พร้อมให้ช่องค้นหาขยายเต็มจอ
 - **Footer Copyright Bar**: จัดให้ข้อความลิขสิทธิ์และสโลแกน stack แนวตั้งพร้อมจัดกลางบน mobile (`flex-col sm:flex-row items-center`)
 
-## 14. สถานะปัจจุบัน (Current Status)
+## 14. ระบบแก้ไขสถิติ Hero และ Footer จากหน้า Admin (Configurable Hero Stats & Footer)
+- **Hero Stats Settings**: เพิ่ม 6 fields ใหม่ (`stat_num_1/2/3`, `stat_label_1/2/3`) ให้สามารถแก้ไขตัวเลขสถิติ (10+, 50+, 100%) และคำอธิบายได้จากหน้า Admin Settings
+- **Footer Settings**: เพิ่ม 8 fields ใหม่สำหรับข้อมูล Footer ทั้งหมด:
+    - ชื่อแบรนด์ไทย/อังกฤษ (`footer_brand_name`, `footer_brand_name_en`)
+    - คำอธิบายแบรนด์ (`footer_brand_desc`) รองรับขึ้นบรรทัดใหม่ด้วย `\n`
+    - หัวข้อสินค้าและรายการสินค้า (`footer_product_heading`, `footer_product_list`) คั่นด้วย `,`
+    - หัวข้อติดต่อ (`footer_contact_heading`)
+    - Copyright และ Slogan (`footer_copyright`, `footer_slogan`)
+- **Admin Settings Panel**: เพิ่ม 2 sections ใหม่ — "สถิติ Hero (Stats)" และ "ส่วนท้าย (Footer)" พร้อม input fields ครบทุก field
+- **ไฟล์ที่แก้ไข**: `SettingsContext.tsx`, `HomePage.tsx`, `Footer.tsx`, `SettingsPanel.tsx`
+
+## 15. สถานะปัจจุบัน (Current Status)
 - ✅ ระบบจัดการรูปภาพ (Media Management) พร้อมใช้งานอย่างสมบูรณ์ในหน้า Admin
 - ✅ รองรับการอัปโหลดพร้อมตั้งชื่อ (English only), ลบ (พร้อมระบบยืนยัน) และคัดลอก URL
 - ✅ ระบบไอคอนมาตรฐาน (LineIcons) ถูกนำไปใช้ทั่วทั้งระบบ Admin
 - ✅ ระบบจัดการความผิดพลาด (Error Handling) สำหรับการอัปโหลดขนาดใหญ่และชื่อไฟล์พิเศษทำงานครบถ้วน
 - ✅ Responsive Design ปรับปรุงให้รองรับหน้าจอมือถือ (375px+) ทุกหน้าไม่มีการซ้อนทับ
+- ✅ Hero Stats (ตัวเลข/คำอธิบาย) และ Footer ทั้งหมดแก้ไขได้จากหน้า Admin Settings
 
 ---
 *บันทึกโดย Antigravity (AI Coding Assistant)*
+

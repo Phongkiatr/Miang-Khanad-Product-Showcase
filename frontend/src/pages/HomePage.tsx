@@ -158,16 +158,29 @@ export default function HomePage() {
 
               {/* สถิติหรือจุดเด่นของแบรนด์ */}
               <div className="animate-fade-in opacity-0 delay-600 grid grid-cols-3 gap-4 sm:gap-10 mt-16 pt-10 border-t border-black/10">
-                {[
-                  { num: '10+', label: 'ปีแห่งประสบการณ์' },
-                  { num: '50+', label: 'รายการสินค้า' },
-                  { num: '100%', label: 'งานฝีมือแท้' },
-                ].map((stat) => (
-                  <div key={stat.label}>
-                    <div className="text-xl sm:text-2xl font-bold text-charcoal leading-none">{stat.num}</div>
-                    <div className="text-[10px] sm:text-xs font-light text-muted mt-1 tracking-wide">{stat.label}</div>
-                  </div>
-                ))}
+                {settingsLoading ? (
+                  <>
+                    {[1, 2, 3].map((i) => (
+                      <div key={i} className="flex flex-col gap-2">
+                        <div className="h-6 sm:h-8 w-16 bg-charcoal/10 rounded animate-pulse" />
+                        <div className="h-3 w-20 bg-black/5 rounded animate-pulse mt-1" />
+                      </div>
+                    ))}
+                  </>
+                ) : (
+                  <>
+                    {[
+                      { num: settings.stat_num_1, label: settings.stat_label_1 },
+                      { num: settings.stat_num_2, label: settings.stat_label_2 },
+                      { num: settings.stat_num_3, label: settings.stat_label_3 },
+                    ].map((stat) => (
+                      <div key={stat.label}>
+                        <div className="text-xl sm:text-2xl font-bold text-charcoal leading-none">{stat.num}</div>
+                        <div className="text-[10px] sm:text-xs font-light text-muted mt-1 tracking-wide">{stat.label}</div>
+                      </div>
+                    ))}
+                  </>
+                )}
               </div>
             </div>
 
