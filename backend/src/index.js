@@ -28,8 +28,9 @@ app.use(cors({
   allowedHeaders: ['Content-Type', 'Authorization'],
 }));
 
-// Body parser for JSON data
+// Body parser for JSON and URL-encoded data
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 // Request logger
 app.use(morgan(process.env.NODE_ENV === 'production' ? 'combined' : 'dev'));
@@ -63,3 +64,11 @@ app.listen(PORT, () => {
 });
 
 export default app;
+
+// Vercel Serverless Function Configuration
+// ปิดการใช้งาน Vercel Body Parser อัตโนมัติ เพื่อให้ Multer สามารถรับ File Stream (multipart/form-data) ได้
+export const config = {
+  api: {
+    bodyParser: false,
+  },
+};

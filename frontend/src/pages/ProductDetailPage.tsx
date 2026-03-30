@@ -219,18 +219,19 @@ export default function ProductDetailPage() {
                 <span className="text-[13px] font-semibold tracking-[0.1em] uppercase text-charcoal">เลือกสี</span>
                 <span className="text-[13px] font-light text-muted">{selectedColor || 'กรุณาเลือก'}</span>
               </div>
-              <div className="flex flex-wrap gap-3">
+              <div className="flex flex-wrap gap-2">
                 {allUniqueColors.map((color: any) => (
                   <button
                     key={color}
                     onClick={() => setSelectedColor(color)}
-                    className={`w-9 h-9 rounded-full border-none cursor-pointer transition-all duration-200
+                    className={`px-4 py-2 text-[13px] font-semibold border transition-all duration-150
+                                 cursor-pointer
                                  ${selectedColor === color
-                                   ? 'outline outline-2 outline-charcoal outline-offset-2 scale-110'
-                                   : 'hover:scale-105'}`}
-                    style={{ background: '#8A8278' }} // Note: in a real app, color might be a hex code or we map it
-                    title={color}
-                  />
+                                   ? 'bg-charcoal text-white border-charcoal'
+                                   : 'bg-transparent text-charcoal border-black/15 hover:border-charcoal'}`}
+                  >
+                    {color}
+                  </button>
                 ))}
               </div>
             </div>

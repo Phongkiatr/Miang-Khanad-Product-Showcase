@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { api } from '../../lib/api';
 import { Modal, Field, SubmitBtn, Input, Confirm, LIcon } from './AdminUI';
+import imageCompression from 'browser-image-compression';
 
 export default function MediaPanel() {
   const [images, setImages] = useState<any[]>([]);
@@ -39,9 +40,38 @@ export default function MediaPanel() {
       return;
     }
 
+    // Limit origin file size to 10MB
+    if (selectedFile.size > 10 * 1024 * 1024) {
+      alert('ขนาดไฟล์ต้องไม่เกิน 10MB');
+      return;
+    }
+
     try {
       setUploading(true);
-      await api.media.upload(selectedFile, customName);
+
+      let fileToUpload = selectedFile;
+      
+      // Auto-compress on the client side if > 1MB to bypass Vercel's 4.5MB Serverless Function limit
+      if (selectedFile.type.startsWith('image/') && selectedFile.size > 1 * 1024 * 1024) {
+        try {
+          const options = {
+            maxSizeMB: 1, // Compress to ~1MB
+            maxWidthOrHeight: 1920,
+            useWebWorker: true,
+            fileType: selectedFile.type // WebP / JPEG / PNG
+          };
+          fileToUpload = await imageCompression(selectedFile, options);
+          console.log(`Compressed from ${selectedFile.size} to ${fileToUpload.size}`);
+        } catch (err) {
+          console.error("Compression failed:", err);
+          // We can't fallback to original if it's > 4.5MB because Vercel will block it anyway.
+          if (selectedFile.size > 4.5 * 1024 * 1024) {
+            throw new Error('ไม่สามารถบีบอัดไฟล์ได้ และไฟล์ต้นฉบับใหญ่เกินระบบจะรับได้ (4.5MB)');
+          }
+        }
+      }
+
+      await api.media.upload(fileToUpload, customName);
       await loadImages();
       setShowUploadModal(false);
       setCustomName('');

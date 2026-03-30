@@ -121,12 +121,16 @@ function AdminLayout() {
                      lg:translate-x-0 lg:static lg:z-auto`}
       >
         {/* Brand */}
-        <div className="px-6 py-7 border-b border-white/10">
+        <Link 
+          to="/"
+          className="px-6 py-7 border-b border-white/10 block no-underline hover:bg-white/5 transition-colors cursor-pointer"
+          title="กลับหน้าหลัก"
+        >
           <div className="text-xl font-bold text-white tracking-wide">เมียงขนาด</div>
           <div className="text-[10px] text-gold tracking-[0.3em] uppercase font-light mt-0.5">
             ADMIN PANEL
           </div>
-        </div>
+        </Link>
 
         {/* Nav */}
         <nav className="flex-1 px-4 py-6 flex flex-col gap-1">
